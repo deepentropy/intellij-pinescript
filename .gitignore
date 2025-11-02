@@ -10,6 +10,7 @@ out/
 
 # IntelliJ
 .idea_modules/
+.intellijPlatform/
 
 # macOS
 .DS_Store

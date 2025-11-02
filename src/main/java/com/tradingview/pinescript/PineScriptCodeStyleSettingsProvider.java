@@ -7,10 +7,15 @@ import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
+    @NotNull
     @Override
-    public CodeStyleAbstractConfigurable createConfigurable(@NotNull CodeStyleSettings settings, @NotNull CodeStyleAbstractConfigurable parent) {
-        return new CodeStyleAbstractConfigurable(settings, parent, "PineScript") {
+    public CodeStyleAbstractConfigurable createConfigurable(@NotNull CodeStyleSettings settings,
+                                                            @NotNull CodeStyleSettings modelSettings) {
+        return new CodeStyleAbstractConfigurable(settings, modelSettings, "PineScript") {
             @Override
             protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
                 return new PineScriptCodeStylePanel(settings);
@@ -24,11 +29,11 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         }
 
         @Override
-        protected void resetImpl(CodeStyleSettings settings) {
+        protected void resetImpl(@NotNull CodeStyleSettings settings) {
         }
 
         @Override
-        public void apply(CodeStyleSettings settings) {
+        public void apply(@NotNull CodeStyleSettings settings) {
         }
 
         @Override
@@ -39,7 +44,23 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         @Nullable
         @Override
         public JComponent getPanel() {
-            return new javax.swing.JPanel();
+            return new JPanel();
+        }
+
+        @Nullable
+        @Override
+        protected String getPreviewText() {
+            return """
+                //@version=6
+                indicator("Example", overlay=true)
+
+                type Bar
+                    float open
+                    float close
+
+                sma = ta.sma(close, 20)
+                plot(sma)
+                """;
         }
     }
 }
