@@ -17,6 +17,7 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("String", PineScriptSyntaxHighlighter.STRING),
         new AttributesDescriptor("Number", PineScriptSyntaxHighlighter.NUMBER),
         new AttributesDescriptor("Comment", PineScriptSyntaxHighlighter.COMMENT),
+        new AttributesDescriptor("Annotation", PineScriptSyntaxHighlighter.ANNOTATION),
         new AttributesDescriptor("Identifier", PineScriptSyntaxHighlighter.IDENTIFIER),
         new AttributesDescriptor("Operator", PineScriptSyntaxHighlighter.OPERATOR)
     };
@@ -37,11 +38,28 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
     @Override
     public String getDemoText() {
         return """
-            //@version=5
+            //@version=6
+            //@description A PineScript v6 example with user-defined types
             indicator("My Indicator", overlay=true)
 
-            // Calculate SMA
-            sma = ta.sma(close, 20)
+            //@type Custom price bar type
+            type PriceBar
+                float open
+                float high
+                float low
+                float close
+
+            //@enum Chart timeframes
+            enum Timeframe
+                m1 = "1 minute"
+                m5 = "5 minutes"
+                h1 = "1 hour"
+
+            // Calculate SMA using v6 syntax
+            method calculateSMA(series float src, simple int length) =>
+                ta.sma(src, length)
+
+            sma = close.calculateSMA(20)
 
             // Plot the result
             plot(sma, color=color.blue, title="SMA")

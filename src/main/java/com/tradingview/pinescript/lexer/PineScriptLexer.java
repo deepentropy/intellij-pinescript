@@ -57,9 +57,22 @@ public class PineScriptLexer extends LexerBase {
             return;
         }
 
-        // Handle line comments
+        // Handle line comments and annotations
         if (c == '/' && myCurrentOffset + 1 < myEndOffset && myBuffer.charAt(myCurrentOffset + 1) == '/') {
+            int commentStart = myCurrentOffset;
             myCurrentOffset += 2;
+
+            // Check if this is an annotation (starts with //@)
+            if (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) == '@') {
+                // Skip to end of line
+                while (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) != '\n') {
+                    myCurrentOffset++;
+                }
+                myTokenType = PineScriptTokenTypes.ANNOTATION;
+                return;
+            }
+
+            // Regular comment
             while (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) != '\n') {
                 myCurrentOffset++;
             }
@@ -232,26 +245,40 @@ public class PineScriptLexer extends LexerBase {
 
     private IElementType getKeywordTokenType(String text) {
         switch (text) {
+            // Control flow keywords
             case "if":
             case "else":
             case "for":
             case "while":
+            case "switch":
             case "break":
             case "continue":
             case "return":
+            // Declaration keywords
             case "function":
+            case "method":
             case "var":
             case "varip":
+            case "type":
+            case "enum":
+            // Module keywords
             case "import":
             case "export":
+            // Script type keywords
             case "indicator":
             case "strategy":
             case "library":
                 return PineScriptTokenTypes.KEYWORD;
+            // Boolean and special constants
             case "true":
             case "false":
             case "na":
                 return PineScriptTokenTypes.CONSTANT;
+            // Logical operators (v6 style)
+            case "and":
+            case "or":
+            case "not":
+                return PineScriptTokenTypes.OPERATOR;
         }
         return null;
     }
