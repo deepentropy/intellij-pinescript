@@ -51,10 +51,14 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Language registration -->
+        <lang.language id="PineScript"
+                      implementationClass="com.tradingview.pinescript.PineScriptLanguage"/>
+
+        <!-- File type registration -->
         <fileType name="PineScript"
                   implementationClass="com.tradingview.pinescript.PineScriptFileType"
                   language="PineScript"
-                  patterns="*.pine;*.pinescript"/>
+                  extensions="pine;pinescript"/>
 
         <!-- Lexer factory -->
         <lang.syntaxHighlighterFactory language="PineScript"
