@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin>
+    <id>com.tradingview.pinescript</id>
+    <name>PineScript Language Support</name>
+    <vendor email="support@example.com" url="https://github.com/yourusername/pinescript-plugin">
+        Your Name
+    </vendor>
+
+    <description><![CDATA[
+      Adds comprehensive PineScript language support to PyCharm and IntelliJ IDEA.
+      <br/>
+      Features:
+      <ul>
+        <li>Syntax highlighting for PineScript v5</li>
+        <li>Code completion for built-in functions and variables</li>
+        <li>Smart code inspections and error detection</li>
+        <li>Formatting support</li>
+      </ul>
+    ]]></description>
+
+    <!-- Changelog for the plugin -->
+    <change-notes><![CDATA[
+      <h3>Initial Release (1.0.0)</h3>
+      <ul>
+        <li>Syntax highlighting with proper color scheme</li>
+        <li>Code completion for PineScript v5 built-ins</li>
+        <li>Support for indicator() and strategy() declarations</li>
+        <li>Technical analysis function autocomplete (ta.*)</li>
+        <li>Request function support (request.security, etc.)</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <!-- Minimum IDE version -->
+    <idea-version since-build="231.0"/>
+
+    <!-- Declare dependency on core IDE functionality -->
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Language registration -->
+        <fileType name="PineScript"
+                  implementationClass="com.tradingview.pinescript.PineScriptFileType"
+                  language="PineScript"
+                  patterns="*.pine;*.pinescript"/>
+
+        <!-- Lexer factory -->
+        <lang.syntaxHighlighterFactory language="PineScript"
+                                       implementationClass="com.tradingview.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
+
+        <!-- Color settings page -->
+        <colorSettingsPage implementation="com.tradingview.pinescript.highlighting.PineScriptColorSettingsPage"/>
+
+        <!-- Completion contributor -->
+        <completion.contributor language="PineScript"
+                               implementationClass="com.tradingview.pinescript.completion.PineScriptCompletionContributor"/>
+
+        <!-- Bracket matching -->
+        <lang.braceMatcher language="PineScript"
+                          implementationClass="com.tradingview.pinescript.PineScriptBraceMatcher"/>
+
+        <!-- Quote handler -->
+        <lang.quoteHandler language="PineScript"
+                          implementationClass="com.tradingview.pinescript.PineScriptQuoteHandler"/>
+
+        <!-- Code style settings -->
+        <lang.codeStyleSettingsProvider
+            implementation="com.tradingview.pinescript.PineScriptCodeStyleSettingsProvider"/>
+    </extensions>
+
+    <actions>
+        <!-- Optional: Add menu items or toolbar actions here -->
+    </actions>
+</idea-plugin>
