@@ -180,28 +180,39 @@ See the **Building the Plugin** section below.
 
 ### Build Troubleshooting
 
-#### Common Issue: Gradle Compatibility Error
+#### Gradle Version Compatibility
 
-If you get an error like:
-```
-class org.jetbrains.intellij.MemoizedProvider overrides final method...
-```
+**✅ Supported Gradle Versions:**
+- Gradle 8.10 or higher (recommended: 8.10.2)
+- Gradle 9.x (including 9.2.0)
 
-This means your Gradle version is incompatible with the IntelliJ plugin version. **Solution:**
+**✅ Supported IDE Versions:**
+- IntelliJ IDEA 2024.1+ (build 241+)
+- PyCharm 2024.1+ up to 2025.2.4 (build 252.*)
 
-The project is configured to use Gradle 8.4 via the wrapper. Simply run:
+The project uses **IntelliJ Platform Gradle Plugin 2.1.0** which supports modern Gradle versions.
 
+#### Common Issues and Solutions
+
+**Issue 1: "Type org.gradle.api.internal.plugins.DefaultArtifactPublicationSet not present"**
+
+This error occurs with older plugin versions. The project now uses plugin 2.1.0 which fixes this.
+
+**Solution:**
 ```bash
-# On Linux/Mac
+# Pull the latest changes
+git pull
+
+# Use the wrapper (downloads correct Gradle version automatically)
 ./gradlew buildPlugin
 
 # On Windows
 gradlew.bat buildPlugin
 ```
 
-The wrapper will automatically download the correct Gradle version (8.4).
+**Issue 2: Gradle Compatibility Error**
 
-If you still have issues:
+If you get an error about incompatible Gradle versions:
 
 1. **Clear Gradle caches**
    ```bash
