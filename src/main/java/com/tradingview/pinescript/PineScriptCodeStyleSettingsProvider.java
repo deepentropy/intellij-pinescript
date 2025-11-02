@@ -2,6 +2,7 @@ package com.tradingview.pinescript;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +62,12 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
                 sma = ta.sma(close, 20)
                 plot(sma)
                 """;
+        }
+
+        @NotNull
+        @Override
+        protected FileType getFileType() {
+            return PineScriptFileType.INSTANCE;
         }
     }
 }

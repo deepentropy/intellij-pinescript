@@ -38,9 +38,4 @@ public class PineScriptFileType extends LanguageFileType {
         // Return null for now - you can add an icon later
         return null;
     }
-
-    @Override
-    public boolean isBinary() {
-        return false;
-    }
 }
