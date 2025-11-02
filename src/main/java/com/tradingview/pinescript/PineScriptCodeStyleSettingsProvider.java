@@ -80,5 +80,10 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
                     .getInstance()
                     .createEditorHighlighter(new PineScriptSyntaxHighlighter(), scheme);
         }
+
+        @Override
+        protected int getRightMargin() {
+            return 120;
+        }
     }
 }
