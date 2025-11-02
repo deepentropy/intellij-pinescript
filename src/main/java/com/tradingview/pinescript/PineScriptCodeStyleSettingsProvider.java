@@ -2,9 +2,12 @@ package com.tradingview.pinescript;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
+import com.tradingview.pinescript.highlighting.PineScriptSyntaxHighlighter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,6 +71,14 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         @Override
         protected FileType getFileType() {
             return PineScriptFileType.INSTANCE;
+        }
+
+        @NotNull
+        @Override
+        protected EditorHighlighter createHighlighter(@NotNull EditorColorsScheme scheme) {
+            return com.intellij.openapi.editor.highlighter.EditorHighlighterFactory
+                    .getInstance()
+                    .createEditorHighlighter(new PineScriptSyntaxHighlighter(), scheme);
         }
     }
 }
