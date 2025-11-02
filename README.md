@@ -180,26 +180,65 @@ See the **Building the Plugin** section below.
 
 ### Build Troubleshooting
 
-If you encounter issues with the IntelliJ Gradle plugin, try:
+#### Common Issue: Gradle Compatibility Error
+
+If you get an error like:
+```
+class org.jetbrains.intellij.MemoizedProvider overrides final method...
+```
+
+This means your Gradle version is incompatible with the IntelliJ plugin version. **Solution:**
+
+The project is configured to use Gradle 8.4 via the wrapper. Simply run:
+
+```bash
+# On Linux/Mac
+./gradlew buildPlugin
+
+# On Windows
+gradlew.bat buildPlugin
+```
+
+The wrapper will automatically download the correct Gradle version (8.4).
+
+If you still have issues:
 
 1. **Clear Gradle caches**
    ```bash
+   # Linux/Mac
    ./gradlew clean
    rm -rf ~/.gradle/caches
+
+   # Windows (PowerShell)
+   .\gradlew.bat clean
+   Remove-Item -Recurse -Force $env:USERPROFILE\.gradle\caches
    ```
 
-2. **Use offline mode** (if you have cached dependencies)
+2. **Delete wrapper and regenerate**
+   ```bash
+   # Remove existing wrapper files
+   rm -rf gradle/wrapper
+
+   # Windows
+   rmdir /s /q gradle\wrapper
+
+   # Then run gradle wrapper again
+   gradle wrapper
+   ```
+
+3. **Use offline mode** (if you have cached dependencies)
    ```bash
    ./gradlew buildPlugin --offline
    ```
 
-3. **Check network connectivity**
+4. **Check network connectivity**
 
    Ensure you can access:
    - https://plugins.gradle.org/
    - https://repo1.maven.org/maven2/
+   - https://services.gradle.org/distributions/
 
-4. **Verify settings.gradle.kts**
+5. **Verify settings.gradle.kts**
 
    Ensure `settings.gradle.kts` contains:
    ```kotlin
@@ -210,6 +249,13 @@ If you encounter issues with the IntelliJ Gradle plugin, try:
        }
    }
    ```
+
+6. **Check Java version**
+   ```bash
+   java -version
+   ```
+
+   Ensure you have JDK 17 or higher installed.
 
 ### Alternative Build Method (Manual Compilation)
 
