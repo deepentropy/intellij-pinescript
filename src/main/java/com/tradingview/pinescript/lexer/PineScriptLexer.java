@@ -8,6 +8,7 @@ public class PineScriptLexer extends LexerBase {
     private CharSequence myBuffer;
     private int myEndOffset;
     private int myCurrentOffset;
+    private int myTokenStart;
     private IElementType myTokenType;
 
     @Override
@@ -15,6 +16,7 @@ public class PineScriptLexer extends LexerBase {
         myBuffer = buffer;
         myEndOffset = endOffset;
         myCurrentOffset = startOffset;
+        myTokenStart = startOffset;
         myTokenType = null;
     }
 
@@ -30,7 +32,7 @@ public class PineScriptLexer extends LexerBase {
 
     @Override
     public int getTokenStart() {
-        return myCurrentOffset;
+        return myTokenStart;
     }
 
     @Override
@@ -45,6 +47,8 @@ public class PineScriptLexer extends LexerBase {
             return;
         }
 
+        // Save the start position of the new token
+        myTokenStart = myCurrentOffset;
         char c = myBuffer.charAt(myCurrentOffset);
 
         // Skip whitespace
@@ -240,10 +244,13 @@ public class PineScriptLexer extends LexerBase {
             case "continue":
             case "return":
             case "function":
+            case "method":
             case "var":
             case "varip":
+            case "const":
             case "import":
             case "export":
+            case "type":
             case "indicator":
             case "strategy":
             case "library":
@@ -251,6 +258,14 @@ public class PineScriptLexer extends LexerBase {
             case "true":
             case "false":
             case "na":
+            case "int":
+            case "float":
+            case "bool":
+            case "string":
+            case "color":
+            case "array":
+            case "matrix":
+            case "map":
                 return PineScriptTokenTypes.CONSTANT;
         }
         return null;
