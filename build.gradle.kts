@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.tradingview"
-version = "1.0.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -35,27 +35,24 @@ intellijPlatform {
     pluginConfiguration {
         id = "com.tradingview.pinescript"
         name = "PineScript Language Support"
-        version = "1.0.1"
-        description = "Language support for TradingView's PineScript v5"
+        version = "1.0.0"
+        description = "Professional PineScript language support with TradingView-accurate syntax highlighting"
 
         ideaVersion {
             sinceBuild = "231"
-            untilBuild = "241.*"
+            untilBuild = "261.*"
         }
 
         changeNotes = """
-            <h2>Version 1.0.1</h2>
-            <ul>
-                <li>Fixed critical lexer token boundary tracking bug</li>
-                <li>Added support for PineScript v5 keywords (type, const, method)</li>
-                <li>Improved syntax highlighting</li>
-            </ul>
             <h2>Version 1.0.0</h2>
             <ul>
-                <li>Syntax highlighting for PineScript v5</li>
-                <li>Code completion for built-in functions</li>
-                <li>Support for technical analysis functions</li>
-                <li>Smart completions for indicator() and strategy() declarations</li>
+                <li>Initial release with full PineScript v5 support</li>
+                <li>TradingView-accurate syntax highlighting with correct colors</li>
+                <li>Code completion for all major PineScript namespaces</li>
+                <li>Support for indicator, strategy, and library declarations</li>
+                <li>Built-in function recognition and highlighting</li>
+                <li>Proper handling of ternary operators and special characters</li>
+                <li>Disabled spell checking for PineScript keywords</li>
             </ul>
         """.trimIndent()
     }

@@ -3,6 +3,9 @@ package com.tradingview.pinescript;
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
 import com.intellij.lang.Language;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import com.intellij.openapi.editor.highlighter.EditorHighlighter;
+import com.intellij.openapi.editor.highlighter.EditorHighlighterFactory;
 import com.intellij.psi.codeStyle.CodeStyleConfigurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
@@ -84,6 +87,17 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         @Override
         public Language getDefaultLanguage() {
             return PineScriptLanguage.INSTANCE;
+        }
+
+        @NotNull
+        @Override
+        protected EditorHighlighter createHighlighter(@NotNull EditorColorsScheme scheme) {
+            return EditorHighlighterFactory.getInstance().createEditorHighlighter(getFileType(), scheme, null);
+        }
+
+        @Override
+        protected int getRightMargin() {
+            return 120;
         }
     }
 }
