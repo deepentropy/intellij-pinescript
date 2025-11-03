@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin>
     <id>com.tradingview.pinescript</id>
-    <name>PineScript Language Support</name>
+    <name>PineScript</name>
     <vendor>PineScript Community</vendor>
 
     <description><![CDATA[

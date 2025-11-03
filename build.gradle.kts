@@ -34,7 +34,7 @@ java {
 intellijPlatform {
     pluginConfiguration {
         id = "com.tradingview.pinescript"
-        name = "PineScript Language Support"
+        name = "PineScript"
         version = "1.0.0"
         description = "Professional PineScript language support with TradingView-accurate syntax highlighting"
 
