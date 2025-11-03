@@ -2,31 +2,35 @@
 <idea-plugin>
     <id>com.tradingview.pinescript</id>
     <name>PineScript Language Support</name>
-    <vendor email="support@example.com" url="https://github.com/yourusername/pinescript-plugin">
-        Your Name
-    </vendor>
+    <vendor>PineScript Community</vendor>
 
     <description><![CDATA[
-      Adds comprehensive PineScript language support to PyCharm and IntelliJ IDEA.
-      <br/>
-      Features:
+      Professional PineScript language support for IntelliJ-based IDEs with TradingView-accurate syntax highlighting.
+      <br/><br/>
+      <b>Features:</b>
       <ul>
-        <li>Syntax highlighting for PineScript v5</li>
-        <li>Code completion for built-in functions and variables</li>
-        <li>Smart code inspections and error detection</li>
-        <li>Formatting support</li>
+        <li>Accurate syntax highlighting matching TradingView's official editor colors</li>
+        <li>Support for PineScript v5 keywords and syntax</li>
+        <li>Built-in function recognition (ta.*, math.*, input.*, color.*, etc.)</li>
+        <li>Smart code completion for PineScript built-in functions and namespaces</li>
+        <li>Recognition of all PineScript constants and namespaces</li>
+        <li>Proper handling of hex colors, operators, and special syntax</li>
+        <li>No false spell-check warnings for PineScript-specific identifiers</li>
       </ul>
+      <br/>
+      Perfect for developing trading strategies and technical indicators for TradingView.
     ]]></description>
 
-    <!-- Changelog for the plugin -->
     <change-notes><![CDATA[
-      <h3>Initial Release (1.0.0)</h3>
+      <h3>Version 1.0.0</h3>
       <ul>
-        <li>Syntax highlighting with proper color scheme</li>
-        <li>Code completion for PineScript v5 built-ins</li>
-        <li>Support for indicator() and strategy() declarations</li>
-        <li>Technical analysis function autocomplete (ta.*)</li>
-        <li>Request function support (request.security, etc.)</li>
+        <li>Initial release with full PineScript v5 support</li>
+        <li>TradingView-accurate syntax highlighting with correct colors</li>
+        <li>Code completion for all major PineScript namespaces</li>
+        <li>Support for indicator, strategy, and library declarations</li>
+        <li>Built-in function recognition and highlighting</li>
+        <li>Proper handling of ternary operators and special characters</li>
+        <li>Disabled spell checking for PineScript keywords</li>
       </ul>
     ]]>
     </change-notes>
@@ -38,13 +42,14 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Language registration -->
+        <!-- File type registration -->
         <fileType name="PineScript"
                   implementationClass="com.tradingview.pinescript.PineScriptFileType"
+                  fieldName="INSTANCE"
                   language="PineScript"
-                  patterns="*.pine;*.pinescript"/>
+                  extensions="pine;pinescript"/>
 
-        <!-- Lexer factory -->
+        <!-- Syntax highlighter factory -->
         <lang.syntaxHighlighterFactory language="PineScript"
                                        implementationClass="com.tradingview.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
 
@@ -66,6 +71,10 @@
         <!-- Code style settings -->
         <lang.codeStyleSettingsProvider
             implementation="com.tradingview.pinescript.PineScriptCodeStyleSettingsProvider"/>
+
+        <!-- Spell checking strategy - disable for PineScript -->
+        <spellchecker.support language="PineScript"
+                             implementationClass="com.tradingview.pinescript.PineScriptSpellcheckingStrategy"/>
     </extensions>
 
     <actions>

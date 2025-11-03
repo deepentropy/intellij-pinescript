@@ -5,10 +5,16 @@ import com.tradingview.pinescript.PineScriptLanguage;
 
 public interface PineScriptTokenTypes {
     IElementType KEYWORD = new IElementType("KEYWORD", PineScriptLanguage.INSTANCE);
+    IElementType STORAGE_KEYWORD = new IElementType("STORAGE_KEYWORD", PineScriptLanguage.INSTANCE);
+    IElementType BOOLEAN = new IElementType("BOOLEAN", PineScriptLanguage.INSTANCE);
+    IElementType NAMESPACE_CONSTANT = new IElementType("NAMESPACE_CONSTANT", PineScriptLanguage.INSTANCE);
     IElementType CONSTANT = new IElementType("CONSTANT", PineScriptLanguage.INSTANCE);
+    IElementType BUILTIN_FUNCTION = new IElementType("BUILTIN_FUNCTION", PineScriptLanguage.INSTANCE);
+    IElementType PARAMETER_NAME = new IElementType("PARAMETER_NAME", PineScriptLanguage.INSTANCE);
     IElementType IDENTIFIER = new IElementType("IDENTIFIER", PineScriptLanguage.INSTANCE);
     IElementType STRING = new IElementType("STRING", PineScriptLanguage.INSTANCE);
     IElementType NUMBER = new IElementType("NUMBER", PineScriptLanguage.INSTANCE);
+    IElementType HEX_COLOR = new IElementType("HEX_COLOR", PineScriptLanguage.INSTANCE);
     IElementType COMMENT = new IElementType("COMMENT", PineScriptLanguage.INSTANCE);
     IElementType OPERATOR = new IElementType("OPERATOR", PineScriptLanguage.INSTANCE);
 

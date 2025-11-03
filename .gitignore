@@ -1,1 +1,6 @@
 .idea/
+.gradle/
+build/
+*.class
+*.jar
+*.log

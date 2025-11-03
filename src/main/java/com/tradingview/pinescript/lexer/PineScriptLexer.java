@@ -8,6 +8,7 @@ public class PineScriptLexer extends LexerBase {
     private CharSequence myBuffer;
     private int myEndOffset;
     private int myCurrentOffset;
+    private int myTokenStart;
     private IElementType myTokenType;
 
     @Override
@@ -15,7 +16,9 @@ public class PineScriptLexer extends LexerBase {
         myBuffer = buffer;
         myEndOffset = endOffset;
         myCurrentOffset = startOffset;
+        myTokenStart = startOffset;
         myTokenType = null;
+        advance();
     }
 
     @Override
@@ -30,7 +33,7 @@ public class PineScriptLexer extends LexerBase {
 
     @Override
     public int getTokenStart() {
-        return myCurrentOffset;
+        return myTokenStart;
     }
 
     @Override
@@ -45,6 +48,8 @@ public class PineScriptLexer extends LexerBase {
             return;
         }
 
+        // Save the start position of the new token
+        myTokenStart = myCurrentOffset;
         char c = myBuffer.charAt(myCurrentOffset);
 
         // Skip whitespace
@@ -70,8 +75,10 @@ public class PineScriptLexer extends LexerBase {
         // Handle block comments
         if (c == '/' && myCurrentOffset + 1 < myEndOffset && myBuffer.charAt(myCurrentOffset + 1) == '*') {
             myCurrentOffset += 2;
-            while (myCurrentOffset + 1 < myEndOffset) {
-                if (myBuffer.charAt(myCurrentOffset) == '*' && myBuffer.charAt(myCurrentOffset + 1) == '/') {
+            while (myCurrentOffset < myEndOffset) {
+                if (myCurrentOffset + 1 < myEndOffset &&
+                    myBuffer.charAt(myCurrentOffset) == '*' &&
+                    myBuffer.charAt(myCurrentOffset + 1) == '/') {
                     myCurrentOffset += 2;
                     break;
                 }
@@ -92,11 +99,36 @@ public class PineScriptLexer extends LexerBase {
                     break;
                 }
                 if (ch == '\\') {
-                    myCurrentOffset++;
+                    myCurrentOffset++; // Skip backslash
+                    if (myCurrentOffset < myEndOffset) {
+                        myCurrentOffset++; // Skip escaped character
+                    }
+                } else {
+                    myCurrentOffset++; // Skip regular character
                 }
-                myCurrentOffset++;
             }
             myTokenType = PineScriptTokenTypes.STRING;
+            return;
+        }
+
+        // Handle hex colors (#RRGGBB or #RRGGBBAA)
+        if (c == '#') {
+            myCurrentOffset++;
+            int hexCount = 0;
+            while (myCurrentOffset < myEndOffset && hexCount < 8) {
+                char ch = myBuffer.charAt(myCurrentOffset);
+                if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) {
+                    myCurrentOffset++;
+                    hexCount++;
+                } else {
+                    break;
+                }
+            }
+            if (hexCount == 6 || hexCount == 8) {
+                myTokenType = PineScriptTokenTypes.HEX_COLOR;
+            } else {
+                myTokenType = PineScriptTokenTypes.BAD_CHARACTER;
+            }
             return;
         }
 
@@ -171,6 +203,7 @@ public class PineScriptLexer extends LexerBase {
             case '|':
             case '^':
             case '~':
+            case '?':
                 myCurrentOffset++;
                 myTokenType = PineScriptTokenTypes.OPERATOR;
                 break;
@@ -231,7 +264,46 @@ public class PineScriptLexer extends LexerBase {
     }
 
     private IElementType getKeywordTokenType(String text) {
+        // Check for color constants (color.red, color.green, etc.) - blue
+        if (text.startsWith("color.")) {
+            return PineScriptTokenTypes.BUILTIN_FUNCTION;
+        }
+
+        // Check for namespace constants (format.*, display.*, etc.) - pink
+        if (text.startsWith("format.") || text.startsWith("display.") ||
+            text.startsWith("position.") || text.startsWith("size.") ||
+            text.startsWith("extend.") || text.startsWith("shape.") ||
+            text.startsWith("location.") || text.startsWith("xloc.") ||
+            text.startsWith("yloc.") || text.startsWith("plot.style_") ||
+            text.startsWith("hline.style_") || text.startsWith("line.style_")) {
+            return PineScriptTokenTypes.NAMESPACE_CONSTANT;
+        }
+
+        // Check for built-in function namespaces (input., ta., math., etc.)
+        if (text.startsWith("input.") || text.startsWith("ta.") || text.startsWith("math.") ||
+            text.startsWith("request.") ||
+            text.startsWith("array.") || text.startsWith("matrix.") || text.startsWith("map.") ||
+            text.startsWith("strategy.") || text.startsWith("str.") || text.startsWith("line.") ||
+            text.startsWith("label.") || text.startsWith("box.") || text.startsWith("table.") ||
+            text.startsWith("ticker.") || text.startsWith("timeframe.")) {
+            return PineScriptTokenTypes.BUILTIN_FUNCTION;
+        }
+
+        // Check for built-in variable namespaces (these are namespace constants - pink)
+        if (text.startsWith("barstate.") || text.startsWith("session.") ||
+            text.startsWith("syminfo.") || text.startsWith("timenow")) {
+            return PineScriptTokenTypes.NAMESPACE_CONSTANT;
+        }
+
         switch (text) {
+            // Storage keywords (var, varip, const, switch) - teal color
+            case "var":
+            case "varip":
+            case "const":
+            case "switch":
+                return PineScriptTokenTypes.STORAGE_KEYWORD;
+
+            // Keywords
             case "if":
             case "else":
             case "for":
@@ -240,18 +312,51 @@ public class PineScriptLexer extends LexerBase {
             case "continue":
             case "return":
             case "function":
-            case "var":
-            case "varip":
+            case "method":
             case "import":
             case "export":
+            case "type":
+                return PineScriptTokenTypes.KEYWORD;
+
+            // Annotation keywords (also highlighted as keywords)
             case "indicator":
             case "strategy":
             case "library":
                 return PineScriptTokenTypes.KEYWORD;
+
+            // Built-in standalone functions
+            case "plot":
+            case "plotshape":
+            case "plotchar":
+            case "plotarrow":
+            case "plotbar":
+            case "plotcandle":
+            case "hline":
+            case "fill":
+            case "bgcolor":
+            case "alert":
+            case "alertcondition":
+                return PineScriptTokenTypes.BUILTIN_FUNCTION;
+
+            // Booleans - pink
             case "true":
             case "false":
+                return PineScriptTokenTypes.BOOLEAN;
+
+            // Other constants - orange
             case "na":
                 return PineScriptTokenTypes.CONSTANT;
+
+            // Type keywords (treated as built-in types, should be blue like keywords)
+            case "int":
+            case "float":
+            case "bool":
+            case "string":
+            case "color":
+            case "array":
+            case "matrix":
+            case "map":
+                return PineScriptTokenTypes.KEYWORD;
         }
         return null;
     }
