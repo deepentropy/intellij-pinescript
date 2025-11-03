@@ -5,4 +5,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "pycharm-pinescript"
+rootProject.name = "intellij-pinescript"

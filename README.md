@@ -1,4 +1,4 @@
-# PineScript Language Support
+# IntelliJ PineScript
 
 Professional PineScript language support plugin for IntelliJ-based IDEs (IntelliJ IDEA, PyCharm, WebStorm, etc.).
 
@@ -18,7 +18,7 @@ Professional PineScript language support plugin for IntelliJ-based IDEs (Intelli
 1. Open your IntelliJ-based IDE
 2. Go to `Settings/Preferences` → `Plugins`
 3. Click `Marketplace` tab
-4. Search for "PineScript Language Support"
+4. Search for "PineScript"
 5. Click `Install`
 6. Restart the IDE
 
@@ -68,8 +68,8 @@ The plugin uses TradingView's official color scheme:
 ### Building from Source
 
 ```bash
-git clone https://github.com/yourusername/pycharm-pinescript.git
-cd pycharm-pinescript
+git clone https://github.com/yourusername/intellij-pinescript.git
+cd intellij-pinescript
 ./gradlew buildPlugin
 ```
 
@@ -104,7 +104,7 @@ This project is licensed under the MIT License.
 ## Support
 
 For issues, feature requests, or questions:
-- GitHub Issues: [Report an issue](https://github.com/yourusername/pycharm-pinescript/issues)
+- GitHub Issues: [Report an issue](https://github.com/yourusername/intellij-pinescript/issues)
 - TradingView Community: Join the discussion
 
 ## Screenshots
