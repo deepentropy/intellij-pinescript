@@ -37,14 +37,4 @@ public class PineScriptFileType implements FileType {
     public boolean isBinary() {
         return false;
     }
-
-    @Override
-    public boolean isReadOnly() {
-        return false;
-    }
-
-    @Override
-    public String getCharset(@NotNull com.intellij.openapi.vfs.VirtualFile file, @NotNull CharSequence content) {
-        return "UTF-8";
-    }
 }
