@@ -1,4 +1,4 @@
-package com.tradingview.pinescript.highlighting;
+package io.github.houseofai.pinescript.highlighting;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -8,15 +8,15 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.ui.JBColor;
-import com.tradingview.pinescript.lexer.PineScriptLexer;
-import com.tradingview.pinescript.psi.PineScriptTokenTypes;
+import io.github.houseofai.pinescript.lexer.PineScriptLexer;
+import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 
 public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    // TradingView official colors
+    // Syntax highlighting colors
     private static final Color BLUE_COLOR = new JBColor(new Color(0x5B9CF6), new Color(0x5B9CF6));
     private static final Color GREEN_COLOR = new JBColor(new Color(0x388E3C), new Color(0x388E3C));
     private static final Color TEAL_COLOR = new JBColor(new Color(0x42BDA8), new Color(0x42BDA8));
@@ -24,7 +24,7 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final Color PINK_COLOR = new JBColor(new Color(0xE27275), new Color(0xE27275));
     private static final Color LIGHT_GRAY_COLOR = new JBColor(new Color(0xCACACA), new Color(0xCACACA));
 
-    // Define text attribute keys for different token types with TradingView colors
+    // Define text attribute keys for different token types
     public static final TextAttributesKey KEYWORD =
         TextAttributesKey.createTextAttributesKey("PINE_KEYWORD",
             new TextAttributes(BLUE_COLOR, null, null, null, 0));

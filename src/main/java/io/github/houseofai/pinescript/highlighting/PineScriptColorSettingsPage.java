@@ -1,4 +1,4 @@
-package com.tradingview.pinescript.highlighting;
+package io.github.houseofai.pinescript.highlighting;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -43,7 +43,7 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
     @Override
     public String getDemoText() {
         return """
-            //@version=5
+            //@version=6
             indicator("Relative Strength Index", shorttitle="RSI", format=format.price)
 
             // Input settings
@@ -90,6 +90,6 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "PineScript";
+        return "Pine Script";
     }
 }

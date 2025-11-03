@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.10.4"
 }
 
-group = "com.tradingview"
+group = "io.github.houseofai"
 version = "1.0.0"
 
 repositories {
@@ -21,7 +21,6 @@ dependencies {
 
         // Plugin development tools
         bundledPlugins("com.intellij.java")
-        instrumentationTools()
     }
 }
 
@@ -29,14 +28,21 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 intellijPlatform {
     pluginConfiguration {
-        id = "com.tradingview.pinescript"
-        name = "PineScript"
+        id = "io.github.houseofai.pinescript"
+        name = "Pine Script Support"
         version = "1.0.0"
-        description = "Professional PineScript language support with TradingView-accurate syntax highlighting"
+        description = "Pine Script language support with syntax highlighting for IntelliJ-based IDEs"
 
         ideaVersion {
             sinceBuild = "231"
@@ -46,16 +52,18 @@ intellijPlatform {
         changeNotes = """
             <h2>Version 1.0.0</h2>
             <ul>
-                <li>Initial release with full PineScript v5 support</li>
-                <li>TradingView-accurate syntax highlighting with correct colors</li>
-                <li>Code completion for all major PineScript namespaces</li>
+                <li>Initial release with full Pine Script v6 support</li>
+                <li>Syntax highlighting with appropriate colors</li>
+                <li>Code completion for major Pine Script namespaces</li>
                 <li>Support for indicator, strategy, and library declarations</li>
                 <li>Built-in function recognition and highlighting</li>
                 <li>Proper handling of ternary operators and special characters</li>
-                <li>Disabled spell checking for PineScript keywords</li>
+                <li>Disabled spell checking for Pine Script keywords</li>
             </ul>
         """.trimIndent()
     }
+
+    instrumentCode = false
 
     signing {
         certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")

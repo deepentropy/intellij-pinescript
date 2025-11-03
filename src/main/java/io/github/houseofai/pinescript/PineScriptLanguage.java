@@ -1,4 +1,4 @@
-package com.tradingview.pinescript;
+package io.github.houseofai.pinescript;
 
 import com.intellij.lang.Language;
 

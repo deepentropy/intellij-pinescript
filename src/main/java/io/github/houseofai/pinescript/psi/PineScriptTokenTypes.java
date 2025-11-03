@@ -1,7 +1,7 @@
-package com.tradingview.pinescript.psi;
+package io.github.houseofai.pinescript.psi;
 
 import com.intellij.psi.tree.IElementType;
-import com.tradingview.pinescript.PineScriptLanguage;
+import io.github.houseofai.pinescript.PineScriptLanguage;
 
 public interface PineScriptTokenTypes {
     IElementType KEYWORD = new IElementType("KEYWORD", PineScriptLanguage.INSTANCE);

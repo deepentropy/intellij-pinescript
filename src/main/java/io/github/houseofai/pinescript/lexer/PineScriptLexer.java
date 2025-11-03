@@ -1,8 +1,8 @@
-package com.tradingview.pinescript.lexer;
+package io.github.houseofai.pinescript.lexer;
 
 import com.intellij.lexer.LexerBase;
 import com.intellij.psi.tree.IElementType;
-import com.tradingview.pinescript.psi.PineScriptTokenTypes;
+import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
 
 public class PineScriptLexer extends LexerBase {
     private CharSequence myBuffer;

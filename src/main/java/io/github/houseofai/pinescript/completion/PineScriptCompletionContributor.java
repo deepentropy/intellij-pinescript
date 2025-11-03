@@ -1,10 +1,10 @@
-package com.tradingview.pinescript.completion;
+package io.github.houseofai.pinescript.completion;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
-import com.tradingview.pinescript.PineScriptLanguage;
+import io.github.houseofai.pinescript.PineScriptLanguage;
 import org.jetbrains.annotations.NotNull;
 
 public class PineScriptCompletionContributor extends CompletionContributor {

@@ -1,10 +1,10 @@
-package com.tradingview.pinescript;
+package io.github.houseofai.pinescript;
 
 import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
-import com.tradingview.pinescript.psi.PineScriptTokenTypes;
+import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

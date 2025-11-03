@@ -1,0 +1,22 @@
+<ivy-module version="2.0">
+  <info organisation="bundledPlugin" module="com.intellij.java" revision="IC-231.8770.65"/>
+  <configurations>
+    <conf name="default" visibility="public"/>
+  </configurations>
+  <publications>
+    <artifact name="aether-dependency-resolver" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="debugger-memory-agent" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="java-impl" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="javac2" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jb-jdi" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jgoodies-common" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jps-builders-6" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jps-builders" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jps-javac-extension" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jps-launcher" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jshell-frontend" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="jshell-protocol" ext="jar" conf="default" url="plugins/java/lib"/>
+    <artifact name="sa-jdwp" ext="jar" conf="default" url="plugins/java/lib"/>
+  </publications>
+  <dependencies/>
+</ivy-module>

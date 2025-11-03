@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin>
-    <id>com.tradingview.pinescript</id>
-    <name>PineScript</name>
-    <vendor>PineScript Community</vendor>
+    <id>io.github.houseofai.pinescript</id>
+    <name>Pine Script Support</name>
+    <vendor>House of AI</vendor>
 
     <description><![CDATA[
-      Professional PineScript language support for IntelliJ-based IDEs with TradingView-accurate syntax highlighting.
+      Pine Script language support for IntelliJ-based IDEs with syntax highlighting.
+      <br/><br/>
+      This is an independent, non-commercial plugin that provides IDE support for Pine Script language.
+      Not affiliated with or endorsed by TradingView.
       <br/><br/>
       <b>Features:</b>
       <ul>
-        <li>Accurate syntax highlighting matching TradingView's official editor colors</li>
-        <li>Support for PineScript v5 keywords and syntax</li>
+        <li>Syntax highlighting for Pine Script code</li>
+        <li>Support for Pine Script v6 keywords and syntax</li>
         <li>Built-in function recognition (ta.*, math.*, input.*, color.*, etc.)</li>
-        <li>Smart code completion for PineScript built-in functions and namespaces</li>
-        <li>Recognition of all PineScript constants and namespaces</li>
+        <li>Code completion for Pine Script built-in functions and namespaces</li>
+        <li>Recognition of Pine Script constants and namespaces</li>
         <li>Proper handling of hex colors, operators, and special syntax</li>
-        <li>No false spell-check warnings for PineScript-specific identifiers</li>
+        <li>No false spell-check warnings for Pine Script-specific identifiers</li>
       </ul>
       <br/>
-      Perfect for developing trading strategies and technical indicators for TradingView.
+      Useful for developing trading strategies and technical indicators.
     ]]></description>
 
     <change-notes><![CDATA[
       <h3>Version 1.0.0</h3>
       <ul>
-        <li>Initial release with full PineScript v5 support</li>
-        <li>TradingView-accurate syntax highlighting with correct colors</li>
-        <li>Code completion for all major PineScript namespaces</li>
+        <li>Initial release with full Pine Script v6 support</li>
+        <li>Syntax highlighting with appropriate colors</li>
+        <li>Code completion for major Pine Script namespaces</li>
         <li>Support for indicator, strategy, and library declarations</li>
         <li>Built-in function recognition and highlighting</li>
         <li>Proper handling of ternary operators and special characters</li>
-        <li>Disabled spell checking for PineScript keywords</li>
+        <li>Disabled spell checking for Pine Script keywords</li>
       </ul>
     ]]>
     </change-notes>
@@ -44,37 +47,37 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- File type registration -->
         <fileType name="PineScript"
-                  implementationClass="com.tradingview.pinescript.PineScriptFileType"
+                  implementationClass="io.github.houseofai.pinescript.PineScriptFileType"
                   fieldName="INSTANCE"
                   language="PineScript"
                   extensions="pine;pinescript"/>
 
         <!-- Syntax highlighter factory -->
         <lang.syntaxHighlighterFactory language="PineScript"
-                                       implementationClass="com.tradingview.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
+                                       implementationClass="io.github.houseofai.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
 
         <!-- Color settings page -->
-        <colorSettingsPage implementation="com.tradingview.pinescript.highlighting.PineScriptColorSettingsPage"/>
+        <colorSettingsPage implementation="io.github.houseofai.pinescript.highlighting.PineScriptColorSettingsPage"/>
 
         <!-- Completion contributor -->
         <completion.contributor language="PineScript"
-                               implementationClass="com.tradingview.pinescript.completion.PineScriptCompletionContributor"/>
+                               implementationClass="io.github.houseofai.pinescript.completion.PineScriptCompletionContributor"/>
 
         <!-- Bracket matching -->
         <lang.braceMatcher language="PineScript"
-                          implementationClass="com.tradingview.pinescript.PineScriptBraceMatcher"/>
+                          implementationClass="io.github.houseofai.pinescript.PineScriptBraceMatcher"/>
 
         <!-- Quote handler -->
         <lang.quoteHandler language="PineScript"
-                          implementationClass="com.tradingview.pinescript.PineScriptQuoteHandler"/>
+                          implementationClass="io.github.houseofai.pinescript.PineScriptQuoteHandler"/>
 
         <!-- Code style settings -->
         <lang.codeStyleSettingsProvider
-            implementation="com.tradingview.pinescript.PineScriptCodeStyleSettingsProvider"/>
+            implementation="io.github.houseofai.pinescript.PineScriptCodeStyleSettingsProvider"/>
 
         <!-- Spell checking strategy - disable for PineScript -->
         <spellchecker.support language="PineScript"
-                             implementationClass="com.tradingview.pinescript.PineScriptSpellcheckingStrategy"/>
+                             implementationClass="io.github.houseofai.pinescript.PineScriptSpellcheckingStrategy"/>
     </extensions>
 
     <actions>

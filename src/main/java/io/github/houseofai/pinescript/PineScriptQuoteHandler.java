@@ -1,7 +1,7 @@
-package com.tradingview.pinescript;
+package io.github.houseofai.pinescript;
 
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
-import com.tradingview.pinescript.psi.PineScriptTokenTypes;
+import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
 
 public class PineScriptQuoteHandler extends SimpleTokenSetQuoteHandler {
     public PineScriptQuoteHandler() {

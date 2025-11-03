@@ -1,4 +1,4 @@
-package com.tradingview.pinescript.highlighting;
+package io.github.houseofai.pinescript.highlighting;
 
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;

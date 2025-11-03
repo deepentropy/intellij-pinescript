@@ -1,4 +1,4 @@
-package com.tradingview.pinescript;
+package io.github.houseofai.pinescript;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.IconLoader;
@@ -23,7 +23,7 @@ public class PineScriptFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getDescription() {
-        return "PineScript programming language";
+        return "Pine Script programming language";
     }
 
     @NotNull

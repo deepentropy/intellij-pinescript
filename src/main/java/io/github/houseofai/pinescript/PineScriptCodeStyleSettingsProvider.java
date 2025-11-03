@@ -1,4 +1,4 @@
-package com.tradingview.pinescript;
+package io.github.houseofai.pinescript;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
@@ -64,7 +64,7 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         @Override
         protected @NotNull String getPreviewText() {
             return """
-                    //@version=5
+                    //@version=6
                     indicator("My Script", overlay=true)
 
                     // Calculate moving average
