@@ -18,7 +18,7 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         return new CodeStyleAbstractConfigurable(settings, modelSettings, "PineScript") {
             @Override
             protected @NotNull CodeStyleAbstractPanel createPanel(@NotNull CodeStyleSettings settings) {
-                return new PineScriptCodeStylePanel(getCurrentSettings(), settings);
+                return new PineScriptCodeStylePanel(settings);
             }
 
             @Override
@@ -35,8 +35,8 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
     }
 
     private static class PineScriptCodeStylePanel extends CodeStyleAbstractPanel {
-        protected PineScriptCodeStylePanel(@NotNull CodeStyleSettings currentSettings, @NotNull CodeStyleSettings settings) {
-            super(currentSettings, settings);
+        protected PineScriptCodeStylePanel(@NotNull CodeStyleSettings settings) {
+            super(settings);
         }
 
         @Override
@@ -59,7 +59,7 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
         }
 
         @Override
-        protected String getPreviewText() {
+        protected @NotNull String getPreviewText() {
             return """
                     //@version=5
                     indicator("My Script", overlay=true)
@@ -74,15 +74,15 @@ public class PineScriptCodeStyleSettingsProvider extends CodeStyleSettingsProvid
                     """;
         }
 
-        @Nullable
+        @NotNull
         @Override
-        protected String getFileExt() {
-            return "pine";
+        public com.intellij.openapi.fileTypes.FileType getFileType() {
+            return PineScriptFileType.INSTANCE;
         }
 
         @Nullable
         @Override
-        protected Language getDefaultLanguage() {
+        public Language getDefaultLanguage() {
             return PineScriptLanguage.INSTANCE;
         }
     }
