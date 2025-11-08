@@ -23,7 +23,7 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("Number", PineScriptSyntaxHighlighter.NUMBER),
         new AttributesDescriptor("Hex Color", PineScriptSyntaxHighlighter.HEX_COLOR),
         new AttributesDescriptor("Comment", PineScriptSyntaxHighlighter.COMMENT),
-        new AttributesDescriptor("Annotation", PineScriptSyntaxHighlighter.ANNOTATION),
+        new AttributesDescriptor("Annotation (//@version, //@description)", PineScriptSyntaxHighlighter.ANNOTATION),
         new AttributesDescriptor("Identifier", PineScriptSyntaxHighlighter.IDENTIFIER),
         new AttributesDescriptor("Operator", PineScriptSyntaxHighlighter.OPERATOR)
     };

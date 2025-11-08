@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("org.jetbrains.intellij.platform") version "2.10.4"
 }
 
 group = "io.github.houseofai"
@@ -19,25 +19,18 @@ dependencies {
     intellijPlatform {
         intellijIdeaCommunity("2024.1.7")
         bundledPlugins("com.intellij.java")
-        instrumentationTools()
     }
 }
 
 intellijPlatform {
     pluginConfiguration {
         id = "io.github.houseofai.pinescript"
-        name = "Pine Script Support"
+        name = "PineScript v6 Language Support"
         version = "1.0.0"
 
         ideaVersion {
             sinceBuild = "231"
             untilBuild = "252.*"
-        }
-    }
-
-    pluginVerification {
-        ides {
-            recommended()
         }
     }
 
@@ -52,10 +45,22 @@ intellijPlatform {
     }
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 tasks {
     // Set the JDK version
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
+    }
+
+    // Disable instrumentation due to JDK path issues
+    // The plugin will work without it for development purposes
+    instrumentCode {
+        enabled = false
     }
 }
