@@ -23,6 +23,7 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("Number", PineScriptSyntaxHighlighter.NUMBER),
         new AttributesDescriptor("Hex Color", PineScriptSyntaxHighlighter.HEX_COLOR),
         new AttributesDescriptor("Comment", PineScriptSyntaxHighlighter.COMMENT),
+        new AttributesDescriptor("Annotation", PineScriptSyntaxHighlighter.ANNOTATION),
         new AttributesDescriptor("Identifier", PineScriptSyntaxHighlighter.IDENTIFIER),
         new AttributesDescriptor("Operator", PineScriptSyntaxHighlighter.OPERATOR)
     };
@@ -44,28 +45,49 @@ public class PineScriptColorSettingsPage implements ColorSettingsPage {
     public String getDemoText() {
         return """
             //@version=6
-            indicator("Relative Strength Index", shorttitle="RSI", format=format.price)
+            //@description PineScript v6 example with advanced features
+            indicator("My Indicator", overlay=true)
+
+            //@type Custom price bar type
+            type PriceBar
+                float open
+                float high
+                float low
+                float close
+
+            //@enum Chart timeframes
+            enum Timeframe
+                m1 = "1 minute"
+                m5 = "5 minutes"
+                h1 = "1 hour"
 
             // Input settings
             rsiLength = input.int(14, minval=1, title="RSI Length")
-            rsiSource = input.source(close, "Source")
+            smaLength = input.int(20, minval=1, title="SMA Length")
 
-            // Calculate RSI
-            change = ta.change(rsiSource)
-            up = ta.rma(math.max(change, 0), rsiLength)
-            down = ta.rma(-math.min(change, 0), rsiLength)
-            rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
+            // Calculate RSI using v6 syntax
+            method calculateRSI(series float src, simple int length) =>
+                change = ta.change(src)
+                up = ta.rma(math.max(change, 0), length)
+                down = ta.rma(-math.min(change, 0), length)
+                down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))
 
-            // Plot the result
-            plot(rsi, "RSI", color=color.blue)
+            // Calculate indicators
+            rsi = close.calculateRSI(rsiLength)
+            sma = ta.sma(close, smaLength)
+
+            // Plot the results
+            plot(sma, "SMA", color=color.blue)
+            plot(rsi, "RSI", color=color.orange)
             hline(70, "Upper Band", color=color.red)
             hline(50, "Middle Band", color=color.gray)
             hline(30, "Lower Band", color=color.green)
 
             // Alert condition
             var bool oversold = na
-            if rsi < 30
+            if rsi < 30 and close < sma
                 oversold = true
+                alert("Oversold condition", alert.freq_once_per_bar)
             """;
     }
 

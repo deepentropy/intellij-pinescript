@@ -43,13 +43,21 @@ public class PineScriptLexer extends LexerBase {
 
     @Override
     public void advance() {
+        // Clear previous token type
+        myTokenType = null;
+
         if (myCurrentOffset >= myEndOffset) {
-            myTokenType = null;
+            myTokenStart = myCurrentOffset;
             return;
         }
 
-        // Save the start position of the new token
         myTokenStart = myCurrentOffset;
+
+        // Bounds check - should never happen but defensive
+        if (myCurrentOffset >= myBuffer.length() || myCurrentOffset >= myEndOffset) {
+            return;
+        }
+
         char c = myBuffer.charAt(myCurrentOffset);
 
         // Skip whitespace
@@ -62,9 +70,21 @@ public class PineScriptLexer extends LexerBase {
             return;
         }
 
-        // Handle line comments
+        // Handle line comments and annotations
         if (c == '/' && myCurrentOffset + 1 < myEndOffset && myBuffer.charAt(myCurrentOffset + 1) == '/') {
             myCurrentOffset += 2;
+
+            // Check if this is an annotation (starts with //@)
+            if (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) == '@') {
+                // Skip to end of line
+                while (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) != '\n') {
+                    myCurrentOffset++;
+                }
+                myTokenType = PineScriptTokenTypes.ANNOTATION;
+                return;
+            }
+
+            // Regular comment
             while (myCurrentOffset < myEndOffset && myBuffer.charAt(myCurrentOffset) != '\n') {
                 myCurrentOffset++;
             }
@@ -98,13 +118,10 @@ public class PineScriptLexer extends LexerBase {
                     myCurrentOffset++;
                     break;
                 }
-                if (ch == '\\') {
-                    myCurrentOffset++; // Skip backslash
-                    if (myCurrentOffset < myEndOffset) {
-                        myCurrentOffset++; // Skip escaped character
-                    }
+                if (ch == '\\' && myCurrentOffset + 1 < myEndOffset) {
+                    myCurrentOffset += 2; // Skip backslash and next character
                 } else {
-                    myCurrentOffset++; // Skip regular character
+                    myCurrentOffset++;
                 }
             }
             myTokenType = PineScriptTokenTypes.STRING;
@@ -140,7 +157,8 @@ public class PineScriptLexer extends LexerBase {
                 char ch = myBuffer.charAt(myCurrentOffset);
                 if (Character.isDigit(ch)) {
                     myCurrentOffset++;
-                } else if (ch == '.' && !hasDecimal) {
+                } else if (ch == '.' && !hasDecimal && myCurrentOffset + 1 < myEndOffset && Character.isDigit(myBuffer.charAt(myCurrentOffset + 1))) {
+                    // Only treat dot as decimal if followed by digit
                     hasDecimal = true;
                     myCurrentOffset++;
                 } else {
@@ -153,7 +171,6 @@ public class PineScriptLexer extends LexerBase {
 
         // Handle identifiers and keywords
         if (Character.isLetter(c) || c == '_') {
-            int start = myCurrentOffset;
             myCurrentOffset++;
             while (myCurrentOffset < myEndOffset) {
                 char ch = myBuffer.charAt(myCurrentOffset);
@@ -164,7 +181,7 @@ public class PineScriptLexer extends LexerBase {
                 }
             }
 
-            String text = myBuffer.subSequence(start, myCurrentOffset).toString();
+            String text = myBuffer.subSequence(myTokenStart, myCurrentOffset).toString();
             myTokenType = getKeywordTokenType(text);
             if (myTokenType == null) {
                 myTokenType = PineScriptTokenTypes.IDENTIFIER;
@@ -172,7 +189,7 @@ public class PineScriptLexer extends LexerBase {
             return;
         }
 
-        // Handle operators and punctuation
+        // Handle two-character operators
         if (myCurrentOffset + 1 < myEndOffset) {
             String twoChar = myBuffer.subSequence(myCurrentOffset, myCurrentOffset + 2).toString();
             switch (twoChar) {
@@ -183,12 +200,14 @@ public class PineScriptLexer extends LexerBase {
                 case "&&":
                 case "||":
                 case "=>":
+                case ":=":
                     myCurrentOffset += 2;
                     myTokenType = PineScriptTokenTypes.OPERATOR;
                     return;
             }
         }
 
+        // Handle single-character tokens
         switch (c) {
             case '+':
             case '-':
@@ -203,7 +222,6 @@ public class PineScriptLexer extends LexerBase {
             case '|':
             case '^':
             case '~':
-            case '?':
                 myCurrentOffset++;
                 myTokenType = PineScriptTokenTypes.OPERATOR;
                 break;
@@ -246,6 +264,10 @@ public class PineScriptLexer extends LexerBase {
             case '.':
                 myCurrentOffset++;
                 myTokenType = PineScriptTokenTypes.DOT;
+                break;
+            case '?':
+                myCurrentOffset++;
+                myTokenType = PineScriptTokenTypes.OPERATOR;
                 break;
             default:
                 myCurrentOffset++;
@@ -296,29 +318,26 @@ public class PineScriptLexer extends LexerBase {
         }
 
         switch (text) {
-            // Storage keywords (var, varip, const, switch) - teal color
-            case "var":
-            case "varip":
-            case "const":
-            case "switch":
-                return PineScriptTokenTypes.STORAGE_KEYWORD;
-
-            // Keywords
+            // Control flow keywords
             case "if":
             case "else":
             case "for":
             case "while":
+            case "switch":
             case "break":
             case "continue":
             case "return":
+            // Declaration keywords
             case "function":
             case "method":
+            case "var":
+            case "varip":
+            case "type":
+            case "enum":
+            // Module keywords
             case "import":
             case "export":
-            case "type":
-                return PineScriptTokenTypes.KEYWORD;
-
-            // Annotation keywords (also highlighted as keywords)
+            // Script type keywords
             case "indicator":
             case "strategy":
             case "library":
@@ -338,7 +357,7 @@ public class PineScriptLexer extends LexerBase {
             case "alertcondition":
                 return PineScriptTokenTypes.BUILTIN_FUNCTION;
 
-            // Booleans - pink
+            // Boolean and special constants
             case "true":
             case "false":
                 return PineScriptTokenTypes.BOOLEAN;
@@ -347,7 +366,13 @@ public class PineScriptLexer extends LexerBase {
             case "na":
                 return PineScriptTokenTypes.CONSTANT;
 
-            // Type keywords (treated as built-in types, should be blue like keywords)
+            // Logical operators (v6 style)
+            case "and":
+            case "or":
+            case "not":
+                return PineScriptTokenTypes.OPERATOR;
+
+            // Type keywords
             case "int":
             case "float":
             case "bool":
@@ -357,6 +382,10 @@ public class PineScriptLexer extends LexerBase {
             case "matrix":
             case "map":
                 return PineScriptTokenTypes.KEYWORD;
+
+            // Storage keywords
+            case "const":
+                return PineScriptTokenTypes.STORAGE_KEYWORD;
         }
         return null;
     }

@@ -1,0 +1,91 @@
+//@version=6
+indicator("Advanced Order Blocks with Volume", overlay=true)
+
+// User Inputs
+var float CONSOLIDATION_THRESHOLD = input.float(0.1, "Consolidation Threshold %", minval=0.1, maxval=1.0, step=0.1)
+var int LOOKBACK = input.int(2, "Lookback Period", minval=2, maxval=10)
+var color BULL_COLOR = input.color(color.new(#06aa20, 70), "Bullish OB Color")
+var color BULL_COLOR_TXT = input.color(color.rgb(48, 233, 79), "Bullish OB Color")
+var color BEAR_COLOR = input.color(color.new(#f23645, 70), "Bearish OB Color")
+var color BEAR_COLOR_TXT = input.color(color.rgb(255, 63, 63), "Bearish OB Color")
+// Volume Analysis Inputs
+var string VOL_CALC_METHOD = input.string("Relative", "Volume Calculation Method", options=["Simple", "Relative", "Weighted"])
+var int VOL_LOOKBACK = input.int(20, "Volume Lookback Period", minval=5, maxval=100)
+var float VOL_THRESHOLD = input.float(1.2, "Volume Threshold Multiplier", minval=1.0, maxval=5.0, step=0.1)
+
+// Arrays to store order blocks and volumes
+var bullish_obs = array.new<box>()
+var bearish_obs = array.new<box>()
+var bullish_volumes = array.new<float>()
+var bearish_volumes = array.new<float>()
+
+// Detect consolidation
+is_consolidation(len) =>
+    high_point = ta.highest(high, len)
+    low_point = ta.lowest(low, len)
+    rge = (high_point - low_point) / low_point * 100
+    rge <= CONSOLIDATION_THRESHOLD
+
+// Detect breakout
+is_breakout() =>
+    bull_break = close > open and (close - open) / open * 100 > CONSOLIDATION_THRESHOLD
+    bear_break = close < open and (open - close) / open * 100 > CONSOLIDATION_THRESHOLD
+    [bull_break, bear_break]
+
+// Enhanced volume calculation function
+get_ob_volume(len) =>
+    float vol = 0.0
+
+    if VOL_CALC_METHOD == "Simple"
+        vol := math.avg(volume, volume[1])
+    else if VOL_CALC_METHOD == "Relative"
+        avg_vol = ta.sma(volume, len)
+        vol := volume / avg_vol
+    else // Weighted
+        weight1 = 2.0
+        weight2 = 1.0
+        vol := (volume * weight1 + volume[1] * weight2) / (weight1 + weight2)
+
+    // Apply volume threshold filter
+    avg_volume = ta.sma(volume, VOL_LOOKBACK)
+    significant_volume = volume > avg_volume * VOL_THRESHOLD
+
+    [vol, significant_volume]
+
+// Check for order block setup
+[bull_break, bear_break] = is_breakout()
+in_consolidation = is_consolidation(LOOKBACK)
+[current_volume, is_significant] = get_ob_volume(VOL_LOOKBACK)
+
+// Create new order blocks
+if in_consolidation[1] and bull_break and is_significant
+    box_obj = box.new(time[1], high[1], time, low[1], bgcolor=BULL_COLOR, text_halign = text.align_right, border_color=color.new(color.white, 100), extend=extend.right, xloc=xloc.bar_time, text="                               Vol: " + str.tostring(current_volume, format.volume) + (VOL_CALC_METHOD == "Relative" ? "x" : ""), text_size=size.small, text_color=BULL_COLOR_TXT)
+    array.push(bullish_obs, box_obj)
+    array.push(bullish_volumes, current_volume)
+
+if in_consolidation[1] and bear_break and is_significant
+    box_obj = box.new(time[1], high[1], time, low[1], bgcolor=BEAR_COLOR, text_halign = text.align_right, border_color=color.new(color.white, 100), extend=extend.right, xloc=xloc.bar_time, text="                               Vol: " + str.tostring(current_volume, format.volume) + (VOL_CALC_METHOD == "Relative" ? "x" : ""), text_size=size.small, text_color=BEAR_COLOR_TXT)
+    array.push(bearish_obs, box_obj)
+    array.push(bearish_volumes, current_volume)
+
+// Check for mitigation
+check_mitigation() =>
+    if array.size(bullish_obs) > 0
+        for i = array.size(bullish_obs) - 1 to 0
+            box_obj = array.get(bullish_obs, i)
+            box.set_right(box_obj,time)
+            if low < box.get_bottom(box_obj)
+                box.delete(box_obj)
+                array.remove(bullish_obs, i)
+                array.remove(bullish_volumes, i)
+
+    if array.size(bearish_obs) > 0
+        for i = array.size(bearish_obs) - 1 to 0
+            box_obj = array.get(bearish_obs, i)
+            box.set_right(box_obj,time)
+            if high > box.get_top(box_obj)
+                box.delete(box_obj)
+                array.remove(bearish_obs, i)
+                array.remove(bearish_volumes, i)
+
+check_mitigation()
