@@ -1,6 +1,22 @@
 .idea/
+
+# Gradle
 .gradle/
 build/
+out/
 *.class
 *.jar
 *.log
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+.intellijPlatform/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

@@ -5,35 +5,41 @@
     <vendor>House of AI</vendor>
 
     <description><![CDATA[
-      Pine Script language support for IntelliJ-based IDEs with syntax highlighting.
+      Comprehensive PineScript v6 language support for IntelliJ-based IDEs.
       <br/><br/>
       This is an independent, non-commercial plugin that provides IDE support for Pine Script language.
       Not affiliated with or endorsed by TradingView.
       <br/><br/>
       <b>Features:</b>
       <ul>
-        <li>Syntax highlighting for Pine Script code</li>
-        <li>Support for Pine Script v6 keywords and syntax</li>
-        <li>Built-in function recognition (ta.*, math.*, input.*, color.*, etc.)</li>
-        <li>Code completion for Pine Script built-in functions and namespaces</li>
-        <li>Recognition of Pine Script constants and namespaces</li>
-        <li>Proper handling of hex colors, operators, and special syntax</li>
-        <li>No false spell-check warnings for Pine Script-specific identifiers</li>
+        <li><strong>Full PineScript v6 Syntax:</strong> Support for type, enum, method, and switch keywords</li>
+        <li><strong>Syntax Highlighting:</strong> Distinct colors for keywords, annotations, operators, and more</li>
+        <li><strong>Annotation Support:</strong> Special highlighting for @version, @type, @enum, @field, @function, @param, @returns, @variable, and @description</li>
+        <li><strong>Extensive Code Completion:</strong> 500+ autocomplete items for all major PineScript namespaces</li>
+        <li><strong>Parameter Hints:</strong> Shows function parameters as you type</li>
+        <li><strong>Technical Analysis:</strong> Complete ta.* function library with 50+ indicators</li>
+        <li><strong>Collections:</strong> Full support for array.*, matrix.*, and map.* functions</li>
+        <li><strong>Drawing Objects:</strong> line.*, label.*, box.*, polyline.*, linefill.* functions</li>
+        <li><strong>Smart Features:</strong> Bracket matching, quote handling, code style settings</li>
+        <li><strong>No False Warnings:</strong> Spell checking disabled for PineScript-specific identifiers</li>
       </ul>
       <br/>
-      Useful for developing trading strategies and technical indicators.
+      Perfect for developing trading strategies and technical indicators.
     ]]></description>
 
     <change-notes><![CDATA[
-      <h3>Version 1.0.0</h3>
+      <h3>Version 1.0.0 - PineScript v6 Support</h3>
       <ul>
-        <li>Initial release with full Pine Script v6 support</li>
-        <li>Syntax highlighting with appropriate colors</li>
-        <li>Code completion for major Pine Script namespaces</li>
-        <li>Support for indicator, strategy, and library declarations</li>
-        <li>Built-in function recognition and highlighting</li>
-        <li>Proper handling of ternary operators and special characters</li>
-        <li>Disabled spell checking for Pine Script keywords</li>
+        <li><strong>PineScript v6 Syntax:</strong> Full support for v6 features including type, enum, method, and switch keywords</li>
+        <li><strong>User-Defined Types:</strong> Syntax highlighting for custom types</li>
+        <li><strong>Annotations:</strong> Special highlighting for @version, @type, @enum, @field, @function, @param, @returns, @variable, and @description</li>
+        <li><strong>Parameter Hints:</strong> Shows function parameters with types and default values as you type</li>
+        <li><strong>Expanded Completion:</strong> 500+ autocomplete items covering all major namespaces</li>
+        <li><strong>Technical Analysis:</strong> Comprehensive ta.* function set with 50+ indicators</li>
+        <li><strong>Collections:</strong> Support for map.* and matrix.* functions (v6 features)</li>
+        <li><strong>Drawing Objects:</strong> Completion for polyline.* and linefill.* (v6 features)</li>
+        <li><strong>Built-in Variables:</strong> Extended support for barstate, syminfo, timeframe, and chart namespaces</li>
+        <li><strong>Input Functions:</strong> All input types including input.enum for v6</li>
       </ul>
     ]]>
     </change-notes>

@@ -17,6 +17,7 @@ public interface PineScriptTokenTypes {
     IElementType HEX_COLOR = new IElementType("HEX_COLOR", PineScriptLanguage.INSTANCE);
     IElementType COMMENT = new IElementType("COMMENT", PineScriptLanguage.INSTANCE);
     IElementType OPERATOR = new IElementType("OPERATOR", PineScriptLanguage.INSTANCE);
+    IElementType ANNOTATION = new IElementType("ANNOTATION", PineScriptLanguage.INSTANCE);
 
     IElementType LPAREN = new IElementType("LPAREN", PineScriptLanguage.INSTANCE);
     IElementType RPAREN = new IElementType("RPAREN", PineScriptLanguage.INSTANCE);
