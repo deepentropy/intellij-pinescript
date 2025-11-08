@@ -28,6 +28,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <h3>Version 1.0.1 - Compatibility Update</h3>
+      <ul>
+        <li><strong>Extended IDE Support:</strong> Now compatible with PyCharm/IntelliJ 2025.2 and 2025.3</li>
+        <li><strong>API Updates:</strong> Removed deprecated API usage for better forward compatibility</li>
+        <li><strong>Code Style Settings:</strong> Improved code style provider implementation</li>
+      </ul>
+
       <h3>Version 1.0.0 - PineScript v6 Support</h3>
       <ul>
         <li><strong>PineScript v6 Syntax:</strong> Full support for v6 features including type, enum, method, and switch keywords</li>
