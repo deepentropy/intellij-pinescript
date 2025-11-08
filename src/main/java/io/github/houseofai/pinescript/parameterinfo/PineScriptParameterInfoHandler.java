@@ -26,7 +26,13 @@ public class PineScriptParameterInfoHandler implements ParameterInfoHandler<PsiE
         int offset = context.getOffset();
         PsiElement element = file.findElementAt(offset);
         if (element == null) {
-            return null;
+            // Try getting element at offset - 1 (might be right after opening paren)
+            if (offset > 0) {
+                element = file.findElementAt(offset - 1);
+            }
+            if (element == null) {
+                return null;
+            }
         }
 
         // Find the function call context
@@ -116,61 +122,69 @@ public class PineScriptParameterInfoHandler implements ParameterInfoHandler<PsiE
     }
 
     /**
-     * Finds the function call context for the given element.
+     * Finds the function call context for the given element by analyzing the text.
      */
     private FunctionCallContext findFunctionCall(PsiElement element) {
         if (element == null) {
             return null;
         }
 
-        // Navigate backwards to find the opening parenthesis
-        PsiElement current = element;
+        PsiFile file = element.getContainingFile();
+        if (file == null) {
+            return null;
+        }
+
+        String text = file.getText();
+        int offset = element.getTextRange().getStartOffset();
+
+        // Find the opening parenthesis by scanning backwards
         int parenDepth = 0;
-        PsiElement openParen = null;
+        int openParenPos = -1;
 
-        // First, check if we're inside parentheses
-        while (current != null) {
-            IElementType type = current.getNode() != null ? current.getNode().getElementType() : null;
-
-            if (type == PineScriptTokenTypes.RPAREN) {
+        for (int i = offset - 1; i >= 0; i--) {
+            char c = text.charAt(i);
+            if (c == ')') {
                 parenDepth++;
-            } else if (type == PineScriptTokenTypes.LPAREN) {
+            } else if (c == '(') {
                 if (parenDepth == 0) {
-                    openParen = current;
+                    openParenPos = i;
                     break;
                 }
                 parenDepth--;
             }
+        }
 
-            current = current.getPrevSibling();
-            if (current == null) {
-                current = element.getParent();
-                if (current != null) {
-                    current = current.getPrevSibling();
-                }
+        if (openParenPos == -1) {
+            return null;
+        }
+
+        // Extract function name before the opening paren
+        StringBuilder functionName = new StringBuilder();
+        int i = openParenPos - 1;
+
+        // Skip whitespace
+        while (i >= 0 && Character.isWhitespace(text.charAt(i))) {
+            i--;
+        }
+
+        // Read identifier (may include dots for namespaces like "ta.sma")
+        while (i >= 0) {
+            char c = text.charAt(i);
+            if (Character.isLetterOrDigit(c) || c == '_' || c == '.') {
+                functionName.insert(0, c);
+                i--;
+            } else {
+                break;
             }
         }
 
-        if (openParen == null) {
+        if (functionName.length() == 0) {
             return null;
         }
 
-        // Find the function name (identifier before the opening paren)
-        PsiElement functionNameElement = openParen.getPrevSibling();
-        while (functionNameElement != null && isWhitespace(functionNameElement)) {
-            functionNameElement = functionNameElement.getPrevSibling();
-        }
-
-        if (functionNameElement == null) {
-            return null;
-        }
-
-        String functionName = extractFunctionName(functionNameElement);
-        if (functionName == null || functionName.isEmpty()) {
-            return null;
-        }
-
-        return new FunctionCallContext(functionName, openParen);
+        // Return the opening paren element as anchor
+        PsiElement openParen = file.findElementAt(openParenPos);
+        return new FunctionCallContext(functionName.toString(), openParen != null ? openParen : element);
     }
 
     /**

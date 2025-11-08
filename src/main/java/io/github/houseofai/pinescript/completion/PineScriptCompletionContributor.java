@@ -133,8 +133,21 @@ public class PineScriptCompletionContributor extends CompletionContributor {
             {"entry", "strategy.entry(id, direction, qty, limit, stop, ...)"},
             {"exit", "strategy.exit(id, from_entry, qty, limit, stop, ...)"},
             {"order", "strategy.order(id, direction, qty, limit, stop, ...)"},
-            {"position_avg_price", "strategy.position_avg_price"},
-            {"position_size", "strategy.position_size"}
+            {"close", "strategy.close(id, when, comment, ...)"},
+            {"close_all", "strategy.close_all(when, comment, ...)"},
+            {"cancel", "strategy.cancel(id)"},
+            {"cancel_all", "strategy.cancel_all()"},
+            {"position_avg_price", "Average entry price"},
+            {"position_size", "Current position size"},
+            {"opentrades", "Number of open trades"},
+            {"closedtrades", "Number of closed trades"},
+            {"wintrades", "Number of winning trades"},
+            {"losstrades", "Number of losing trades"},
+            {"eventrades", "Number of break-even trades"},
+            {"grossprofit", "Total gross profit"},
+            {"grossloss", "Total gross loss"},
+            {"netprofit", "Total net profit"},
+            {"max_drawdown", "Maximum drawdown"}
         };
 
         for (String[] func : strategyFunctions) {
@@ -383,5 +396,191 @@ public class PineScriptCompletionContributor extends CompletionContributor {
                     .withTypeText("ticker function")
                     .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
         }
+
+        // Alert functions
+        String[] alertFunctions = {
+            "alert", "alertcondition"
+        };
+
+        for (String func : alertFunctions) {
+            result.addElement(LookupElementBuilder.create(func)
+                    .withTypeText("alert function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Log functions (for debugging)
+        String[] logFunctions = {
+            "log.error", "log.warning", "log.info"
+        };
+
+        for (String func : logFunctions) {
+            result.addElement(LookupElementBuilder.create(func)
+                    .withTypeText("log function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Runtime functions
+        String[] runtimeFunctions = {
+            "runtime.error", "runtime.log"
+        };
+
+        for (String func : runtimeFunctions) {
+            result.addElement(LookupElementBuilder.create(func)
+                    .withTypeText("runtime function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Additional TA functions that might be missing
+        String[][] additionalTaFunctions = {
+            {"wpr", "Williams %R"},
+            {"mfi", "Money Flow Index"},
+            {"cmo", "Chande Momentum Oscillator"},
+            {"cog", "Center of Gravity"},
+            {"linreg", "Linear Regression"},
+            {"dev", "Deviation"},
+            {"falling", "Checks if value is falling"},
+            {"rising", "Checks if value is rising"},
+            {"change", "Difference between current and previous value"},
+            {"hma", "Hull Moving Average"},
+            {"swma", "Symmetrically Weighted Moving Average"},
+            {"vwap", "Volume Weighted Average Price"},
+            {"accdist", "Accumulation/Distribution"},
+            {"cog", "Center Of Gravity"}
+        };
+
+        for (String[] func : additionalTaFunctions) {
+            result.addElement(LookupElementBuilder.create("ta." + func[0])
+                    .withTypeText(func[1])
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Syminfo variables (additional ones)
+        String[] syminfoVars = {
+            "syminfo.volumetype", "syminfo.country"
+        };
+
+        for (String var : syminfoVars) {
+            result.addElement(LookupElementBuilder.create(var)
+                    .withTypeText("syminfo variable")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Variable));
+        }
+
+        // Plot style constants
+        String[] plotStyles = {
+            "plot.style_line", "plot.style_linebr", "plot.style_stepline",
+            "plot.style_stepline_diamond", "plot.style_histogram", "plot.style_cross",
+            "plot.style_area", "plot.style_columns", "plot.style_circles", "plot.style_areabr"
+        };
+
+        for (String style : plotStyles) {
+            result.addElement(LookupElementBuilder.create(style)
+                    .withTypeText("plot style")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Display constants
+        String[] displayConstants = {
+            "display.none", "display.all", "display.data_window", "display.pane",
+            "display.price_scale", "display.status_line"
+        };
+
+        for (String constant : displayConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("display constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Location constants
+        String[] locationConstants = {
+            "location.abovebar", "location.belowbar", "location.top", "location.bottom",
+            "location.absolute"
+        };
+
+        for (String constant : locationConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("location constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Size constants
+        String[] sizeConstants = {
+            "size.auto", "size.tiny", "size.small", "size.normal", "size.large", "size.huge"
+        };
+
+        for (String constant : sizeConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("size constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Shape constants
+        String[] shapeConstants = {
+            "shape.xcross", "shape.cross", "shape.circle", "shape.triangleup", "shape.triangledown",
+            "shape.flag", "shape.arrowup", "shape.arrowdown", "shape.square", "shape.diamond",
+            "shape.labelup", "shape.labeldown"
+        };
+
+        for (String constant : shapeConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("shape constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Format constants
+        String[] formatConstants = {
+            "format.inherit", "format.price", "format.volume", "format.percent"
+        };
+
+        for (String constant : formatConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("format constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Scale constants
+        String[] scaleConstants = {
+            "scale.right", "scale.left", "scale.none"
+        };
+
+        for (String constant : scaleConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("scale constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Hline style constants
+        String[] hlineStyles = {
+            "hline.style_solid", "hline.style_dotted", "hline.style_dashed"
+        };
+
+        for (String style : hlineStyles) {
+            result.addElement(LookupElementBuilder.create(style)
+                    .withTypeText("hline style")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Line style constants
+        String[] lineStyles = {
+            "line.style_solid", "line.style_dotted", "line.style_dashed", "line.style_arrow_left",
+            "line.style_arrow_right", "line.style_arrow_both"
+        };
+
+        for (String style : lineStyles) {
+            result.addElement(LookupElementBuilder.create(style)
+                    .withTypeText("line style")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
+
+        // Extend constants
+        String[] extendConstants = {
+            "extend.none", "extend.left", "extend.right", "extend.both"
+        };
+
+        for (String constant : extendConstants) {
+            result.addElement(LookupElementBuilder.create(constant)
+                    .withTypeText("extend constant")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Constant));
+        }
     }
 }
+

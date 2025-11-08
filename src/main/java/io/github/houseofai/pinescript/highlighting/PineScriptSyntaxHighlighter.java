@@ -70,6 +70,10 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey COMMENT =
         TextAttributesKey.createTextAttributesKey("PINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
 
+    // Annotations like //@version, //@description
+    public static final TextAttributesKey ANNOTATION =
+        TextAttributesKey.createTextAttributesKey("PINE_ANNOTATION", DefaultLanguageHighlighterColors.DOC_COMMENT);
+
     // Variable names use light gray
     public static final TextAttributesKey IDENTIFIER =
         TextAttributesKey.createTextAttributesKey("PINE_IDENTIFIER",
@@ -100,6 +104,7 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
     private static final TextAttributesKey[] HEX_COLOR_KEYS = new TextAttributesKey[]{HEX_COLOR};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
+    private static final TextAttributesKey[] ANNOTATION_KEYS = new TextAttributesKey[]{ANNOTATION};
     private static final TextAttributesKey[] IDENTIFIER_KEYS = new TextAttributesKey[]{IDENTIFIER};
     private static final TextAttributesKey[] OPERATOR_KEYS = new TextAttributesKey[]{OPERATOR};
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
@@ -135,6 +140,8 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
             return HEX_COLOR_KEYS;
         } else if (tokenType == PineScriptTokenTypes.COMMENT) {
             return COMMENT_KEYS;
+        } else if (tokenType == PineScriptTokenTypes.ANNOTATION) {
+            return ANNOTATION_KEYS;
         } else if (tokenType == PineScriptTokenTypes.IDENTIFIER) {
             return IDENTIFIER_KEYS;
         } else if (tokenType == PineScriptTokenTypes.OPERATOR) {

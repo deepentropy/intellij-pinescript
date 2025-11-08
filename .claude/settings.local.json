@@ -24,7 +24,12 @@
       "Bash(powershell -ExecutionPolicy Bypass -File resize_icons.ps1)",
       "Bash(powershell:*)",
       "Bash(cmd /c \"del check_icons.py check_icons.ps1 resize_icons.py resize_icons.ps1 create_hidpi_icon.ps1 final_icon_check.ps1\")",
-      "Bash(cmd /c gradlew.bat clean buildPlugin)"
+      "Bash(cmd /c gradlew.bat clean buildPlugin)",
+      "Bash(gradlew.bat runIde)",
+      "Bash(cmd /c gradlew.bat runIde)",
+      "Bash(./gradlew.bat runIde:*)",
+      "Bash(./gradlew.bat clean:*)",
+      "Bash(./gradlew.bat buildPlugin:*)"
     ],
     "deny": [],
     "ask": []

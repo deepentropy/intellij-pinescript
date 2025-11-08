@@ -51,6 +51,10 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Language registration -->
+        <lang.parserDefinition language="PineScript"
+                              implementationClass="io.github.houseofai.pinescript.parser.PineScriptParserDefinition"/>
+
         <!-- File type registration -->
         <fileType name="PineScript"
                   implementationClass="io.github.houseofai.pinescript.PineScriptFileType"
@@ -88,6 +92,10 @@
         <!-- Parameter info handler -->
         <codeInsight.parameterInfo language="PineScript"
                                   implementationClass="io.github.houseofai.pinescript.parameterinfo.PineScriptParameterInfoHandler"/>
+
+        <!-- Documentation provider (hover docs) -->
+        <lang.documentationProvider language="PineScript"
+                                   implementationClass="io.github.houseofai.pinescript.documentation.PineScriptDocumentationProvider"/>
     </extensions>
 
     <actions>
