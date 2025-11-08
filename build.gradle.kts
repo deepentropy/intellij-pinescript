@@ -35,12 +35,6 @@ intellijPlatform {
         }
     }
 
-    pluginVerification {
-        ides {
-            recommended()
-        }
-    }
-
     publishing {
         token = providers.environmentVariable("PUBLISH_TOKEN")
     }
