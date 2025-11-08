@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin>
     <id>io.github.houseofai.pinescript</id>
-    <name>Pine Script Support</name>
+    <name>PineScript v6 Language Support</name>
     <vendor>House of AI</vendor>
 
     <description><![CDATA[

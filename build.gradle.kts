@@ -25,7 +25,7 @@ dependencies {
 intellijPlatform {
     pluginConfiguration {
         id = "io.github.houseofai.pinescript"
-        name = "Pine Script Support"
+        name = "PineScript v6 Language Support"
         version = "1.0.0"
 
         ideaVersion {

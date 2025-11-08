@@ -117,9 +117,16 @@ public class PineScriptCompletionContributor extends CompletionContributor {
 
         // Request functions
         String[][] requestFunctions = {
-            {"security", "request.security(symbol, timeframe, expression)"},
-            {"earnings", "request.earnings(symbol, field, period)"},
-            {"dividends", "request.dividends(symbol, type, period)"}
+            {"security", "Request data from another symbol/timeframe"},
+            {"security_lower_tf", "Request data from lower timeframe"},
+            {"earnings", "Request earnings data"},
+            {"dividends", "Request dividends data"},
+            {"splits", "Request stock splits data"},
+            {"financial", "Request financial data"},
+            {"economic", "Request economic data"},
+            {"quandl", "Request Quandl data"},
+            {"currency_rate", "Get currency exchange rate"},
+            {"seed", "Seed data from another symbol"}
         };
 
         for (String[] func : requestFunctions) {
@@ -160,7 +167,8 @@ public class PineScriptCompletionContributor extends CompletionContributor {
         String[] mathFunctions = {
             "abs", "acos", "asin", "atan", "avg", "ceil", "cos",
             "exp", "floor", "log", "log10", "max", "min", "pow",
-            "round", "sign", "sin", "sqrt", "sum", "tan"
+            "round", "round_to_mintick", "sign", "sin", "sqrt", "sum", "tan",
+            "todegrees", "toradians", "random"
         };
 
         for (String func : mathFunctions) {
@@ -170,13 +178,30 @@ public class PineScriptCompletionContributor extends CompletionContributor {
         }
 
         // String functions
-        String[] stringFunctions = {
-            "tostring", "tonumber", "format", "substring"
+        String[][] stringFunctions = {
+            {"tostring", "Convert value to string"},
+            {"tonumber", "Convert string to number"},
+            {"format", "Format string with arguments"},
+            {"format_time", "Format time to string"},
+            {"substring", "Extract substring"},
+            {"length", "Get string length"},
+            {"contains", "Check if contains substring"},
+            {"pos", "Find position of substring"},
+            {"split", "Split string into array"},
+            {"replace", "Replace substring"},
+            {"replace_all", "Replace all occurrences"},
+            {"match", "Match regex pattern"},
+            {"startswith", "Check if starts with"},
+            {"endswith", "Check if ends with"},
+            {"lower", "Convert to lowercase"},
+            {"upper", "Convert to uppercase"},
+            {"trim", "Trim whitespace"},
+            {"repeat", "Repeat string"}
         };
 
-        for (String func : stringFunctions) {
-            result.addElement(LookupElementBuilder.create("str." + func)
-                    .withTypeText("string function")
+        for (String[] func : stringFunctions) {
+            result.addElement(LookupElementBuilder.create("str." + func[0])
+                    .withTypeText(func[1])
                     .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
         }
 
@@ -408,48 +433,97 @@ public class PineScriptCompletionContributor extends CompletionContributor {
                     .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
         }
 
-        // Log functions (for debugging)
-        String[] logFunctions = {
-            "log.error", "log.warning", "log.info"
-        };
 
-        for (String func : logFunctions) {
-            result.addElement(LookupElementBuilder.create(func)
-                    .withTypeText("log function")
-                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
-        }
-
-        // Runtime functions
-        String[] runtimeFunctions = {
-            "runtime.error", "runtime.log"
-        };
-
-        for (String func : runtimeFunctions) {
-            result.addElement(LookupElementBuilder.create(func)
-                    .withTypeText("runtime function")
-                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
-        }
-
-        // Additional TA functions that might be missing
+        // Additional TA functions
         String[][] additionalTaFunctions = {
             {"wpr", "Williams %R"},
-            {"mfi", "Money Flow Index"},
             {"cmo", "Chande Momentum Oscillator"},
             {"cog", "Center of Gravity"},
             {"linreg", "Linear Regression"},
             {"dev", "Deviation"},
             {"falling", "Checks if value is falling"},
             {"rising", "Checks if value is rising"},
-            {"change", "Difference between current and previous value"},
             {"hma", "Hull Moving Average"},
             {"swma", "Symmetrically Weighted Moving Average"},
             {"vwap", "Volume Weighted Average Price"},
             {"accdist", "Accumulation/Distribution"},
-            {"cog", "Center Of Gravity"}
+            {"tsi", "True Strength Index"},
+            {"kcw", "Keltner Channels Width"},
+            {"pivot_point_levels", "Pivot Point Levels"},
+            {"smc", "Stochastic Momentum Convergence"}
         };
 
         for (String[] func : additionalTaFunctions) {
             result.addElement(LookupElementBuilder.create("ta." + func[0])
+                    .withTypeText(func[1])
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Chart functions (chart.point.*)
+        String[] chartFunctions = {
+            "point.new", "point.now", "point.from_time", "point.from_index", "point.copy"
+        };
+
+        for (String func : chartFunctions) {
+            result.addElement(LookupElementBuilder.create("chart." + func)
+                    .withTypeText("chart function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Log functions
+        String[] logFunctions = {
+            "error", "warning", "info"
+        };
+
+        for (String func : logFunctions) {
+            result.addElement(LookupElementBuilder.create("log." + func)
+                    .withTypeText("log function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Runtime functions
+        result.addElement(LookupElementBuilder.create("runtime.error")
+                .withTypeText("runtime error function")
+                .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+
+        // Syminfo functions (note: most syminfo.* are variables, but these are functions)
+        String[] syminfoFunctions = {
+            "ticker", "prefix"
+        };
+
+        for (String func : syminfoFunctions) {
+            result.addElement(LookupElementBuilder.create("syminfo." + func)
+                    .withTypeText("syminfo function")
+                    .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
+        }
+
+        // Additional global functions
+        String[][] globalFunctions = {
+            {"time", "Current bar time"},
+            {"time_close", "Bar close time"},
+            {"timestamp", "Create timestamp"},
+            {"year", "Extract year from time"},
+            {"month", "Extract month from time"},
+            {"weekofyear", "Extract week of year"},
+            {"dayofmonth", "Extract day of month"},
+            {"dayofweek", "Extract day of week"},
+            {"hour", "Extract hour from time"},
+            {"minute", "Extract minute from time"},
+            {"second", "Extract second from time"},
+            {"nz", "Replace NA with zero or value"},
+            {"fixnan", "Fix NA values with previous value"},
+            {"max_bars_back", "Set maximum bars back"},
+            {"int", "Convert to int"},
+            {"float", "Convert to float"},
+            {"bool", "Convert to bool"},
+            {"string", "Convert to string"},
+            {"line", "Cast to line type"},
+            {"label", "Cast to label type"},
+            {"box", "Cast to box type"}
+        };
+
+        for (String[] func : globalFunctions) {
+            result.addElement(LookupElementBuilder.create(func[0])
                     .withTypeText(func[1])
                     .withIcon(com.intellij.icons.AllIcons.Nodes.Function));
         }

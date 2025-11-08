@@ -142,6 +142,138 @@ public class PineScriptFunctionRepository {
                 new Parameter("source2", "series")
         ));
 
+        SIGNATURES.put("ta.wma", new PineScriptFunctionSignature("ta.wma",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.rma", new PineScriptFunctionSignature("ta.rma",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.vwma", new PineScriptFunctionSignature("ta.vwma",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.swma", new PineScriptFunctionSignature("ta.swma",
+                new Parameter("source", "series")
+        ));
+
+        SIGNATURES.put("ta.hma", new PineScriptFunctionSignature("ta.hma",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.alma", new PineScriptFunctionSignature("ta.alma",
+                new Parameter("series", "series"),
+                new Parameter("length", "int"),
+                new Parameter("offset", "float", "0.85"),
+                new Parameter("sigma", "float", "6.0")
+        ));
+
+        SIGNATURES.put("ta.cci", new PineScriptFunctionSignature("ta.cci",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.mfi", new PineScriptFunctionSignature("ta.mfi",
+                new Parameter("series", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.roc", new PineScriptFunctionSignature("ta.roc",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.mom", new PineScriptFunctionSignature("ta.mom",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.change", new PineScriptFunctionSignature("ta.change",
+                new Parameter("source", "series"),
+                new Parameter("length", "int", "1")
+        ));
+
+        SIGNATURES.put("ta.rising", new PineScriptFunctionSignature("ta.rising",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.falling", new PineScriptFunctionSignature("ta.falling",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.highest", new PineScriptFunctionSignature("ta.highest",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.lowest", new PineScriptFunctionSignature("ta.lowest",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.highestbars", new PineScriptFunctionSignature("ta.highestbars",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.lowestbars", new PineScriptFunctionSignature("ta.lowestbars",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.stdev", new PineScriptFunctionSignature("ta.stdev",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.variance", new PineScriptFunctionSignature("ta.variance",
+                new Parameter("source", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.correlation", new PineScriptFunctionSignature("ta.correlation",
+                new Parameter("source1", "series"),
+                new Parameter("source2", "series"),
+                new Parameter("length", "int")
+        ));
+
+        SIGNATURES.put("ta.barssince", new PineScriptFunctionSignature("ta.barssince",
+                new Parameter("condition", "bool")
+        ));
+
+        SIGNATURES.put("ta.valuewhen", new PineScriptFunctionSignature("ta.valuewhen",
+                new Parameter("condition", "bool"),
+                new Parameter("source", "series"),
+                new Parameter("occurrence", "int")
+        ));
+
+        SIGNATURES.put("ta.pivothigh", new PineScriptFunctionSignature("ta.pivothigh",
+                new Parameter("source", "series"),
+                new Parameter("leftbars", "int"),
+                new Parameter("rightbars", "int")
+        ));
+
+        SIGNATURES.put("ta.pivotlow", new PineScriptFunctionSignature("ta.pivotlow",
+                new Parameter("source", "series"),
+                new Parameter("leftbars", "int"),
+                new Parameter("rightbars", "int")
+        ));
+
+        SIGNATURES.put("ta.cum", new PineScriptFunctionSignature("ta.cum",
+                new Parameter("source", "series")
+        ));
+
+        SIGNATURES.put("ta.tr", new PineScriptFunctionSignature("ta.tr",
+                new Parameter("handle_na", "bool", "false")
+        ));
+
         // Strategy functions
         SIGNATURES.put("strategy.entry", new PineScriptFunctionSignature("strategy.entry",
                 new Parameter("id", "string"),
@@ -261,6 +393,61 @@ public class PineScriptFunctionRepository {
                 new Parameter("group", "string", "\"\"")
         ));
 
+        SIGNATURES.put("input.timeframe", new PineScriptFunctionSignature("input.timeframe",
+                new Parameter("defval", "string"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("options", "string[]", "na"),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("inline", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
+        SIGNATURES.put("input.session", new PineScriptFunctionSignature("input.session",
+                new Parameter("defval", "string"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("options", "string[]", "na"),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("inline", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
+        SIGNATURES.put("input.symbol", new PineScriptFunctionSignature("input.symbol",
+                new Parameter("defval", "string"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("inline", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
+        SIGNATURES.put("input.price", new PineScriptFunctionSignature("input.price",
+                new Parameter("defval", "float"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("inline", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
+        SIGNATURES.put("input.time", new PineScriptFunctionSignature("input.time",
+                new Parameter("defval", "int"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("inline", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
+        SIGNATURES.put("input.text_area", new PineScriptFunctionSignature("input.text_area",
+                new Parameter("defval", "string"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("tooltip", "string", "\"\""),
+                new Parameter("group", "string", "\"\""),
+                new Parameter("confirm", "bool", "false")
+        ));
+
         // Math functions
         SIGNATURES.put("math.abs", new PineScriptFunctionSignature("math.abs",
                 new Parameter("x", "number")
@@ -296,6 +483,76 @@ public class PineScriptFunctionRepository {
                 new Parameter("condition", "bool"),
                 new Parameter("title", "string", "\"\""),
                 new Parameter("message", "string", "\"\"")
+        ));
+
+        // Additional commonly used functions
+        SIGNATURES.put("barcolor", new PineScriptFunctionSignature("barcolor",
+                new Parameter("color", "color"),
+                new Parameter("offset", "int", "0"),
+                new Parameter("editable", "bool", "true"),
+                new Parameter("show_last", "int", "na"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("display", "plot_display", "display.all")
+        ));
+
+        SIGNATURES.put("plotarrow", new PineScriptFunctionSignature("plotarrow",
+                new Parameter("series", "series"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("colorup", "color", "color.green"),
+                new Parameter("colordown", "color", "color.red"),
+                new Parameter("offset", "int", "0"),
+                new Parameter("minheight", "int", "5"),
+                new Parameter("maxheight", "int", "100"),
+                new Parameter("editable", "bool", "true"),
+                new Parameter("show_last", "int", "na"),
+                new Parameter("display", "plot_display", "display.all")
+        ));
+
+        SIGNATURES.put("plotbar", new PineScriptFunctionSignature("plotbar",
+                new Parameter("open", "series"),
+                new Parameter("high", "series"),
+                new Parameter("low", "series"),
+                new Parameter("close", "series"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("color", "color", "color.blue"),
+                new Parameter("editable", "bool", "true"),
+                new Parameter("show_last", "int", "na"),
+                new Parameter("display", "plot_display", "display.all")
+        ));
+
+        SIGNATURES.put("plotcandle", new PineScriptFunctionSignature("plotcandle",
+                new Parameter("open", "series"),
+                new Parameter("high", "series"),
+                new Parameter("low", "series"),
+                new Parameter("close", "series"),
+                new Parameter("title", "string", "\"\""),
+                new Parameter("color", "color", "color.green"),
+                new Parameter("wickcolor", "color", "color.black"),
+                new Parameter("editable", "bool", "true"),
+                new Parameter("show_last", "int", "na"),
+                new Parameter("bordercolor", "color", "na"),
+                new Parameter("display", "plot_display", "display.all")
+        ));
+
+        SIGNATURES.put("time", new PineScriptFunctionSignature("time",
+                new Parameter("timeframe", "string"),
+                new Parameter("session", "string", "\"\""),
+                new Parameter("timezone", "string", "\"\"")
+        ));
+
+        SIGNATURES.put("time_close", new PineScriptFunctionSignature("time_close",
+                new Parameter("timeframe", "string"),
+                new Parameter("session", "string", "\"\""),
+                new Parameter("timezone", "string", "\"\"")
+        ));
+
+        SIGNATURES.put("timestamp", new PineScriptFunctionSignature("timestamp",
+                new Parameter("year", "int"),
+                new Parameter("month", "int"),
+                new Parameter("day", "int"),
+                new Parameter("hour", "int"),
+                new Parameter("minute", "int"),
+                new Parameter("second", "int", "0")
         ));
 
         // Indicator/Strategy declaration

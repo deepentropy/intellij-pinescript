@@ -301,20 +301,31 @@ public class PineScriptLexer extends LexerBase {
             return PineScriptTokenTypes.NAMESPACE_CONSTANT;
         }
 
+        // Check for built-in variable namespaces first (these are namespace constants - pink)
+        if (text.startsWith("barstate.") || text.startsWith("session.") ||
+            text.equals("timenow")) {
+            return PineScriptTokenTypes.NAMESPACE_CONSTANT;
+        }
+
+        // Check for syminfo - it has both functions and variables
+        // Most common ones are variables, but ticker() and prefix() are functions
+        if (text.startsWith("syminfo.")) {
+            if (text.equals("syminfo.ticker") || text.equals("syminfo.prefix")) {
+                return PineScriptTokenTypes.BUILTIN_FUNCTION;
+            }
+            return PineScriptTokenTypes.NAMESPACE_CONSTANT;
+        }
+
         // Check for built-in function namespaces (input., ta., math., etc.)
         if (text.startsWith("input.") || text.startsWith("ta.") || text.startsWith("math.") ||
             text.startsWith("request.") ||
             text.startsWith("array.") || text.startsWith("matrix.") || text.startsWith("map.") ||
             text.startsWith("strategy.") || text.startsWith("str.") || text.startsWith("line.") ||
             text.startsWith("label.") || text.startsWith("box.") || text.startsWith("table.") ||
-            text.startsWith("ticker.") || text.startsWith("timeframe.")) {
+            text.startsWith("ticker.") || text.startsWith("timeframe.") ||
+            text.startsWith("polyline.") || text.startsWith("linefill.") ||
+            text.startsWith("chart.") || text.startsWith("log.") || text.startsWith("runtime.")) {
             return PineScriptTokenTypes.BUILTIN_FUNCTION;
-        }
-
-        // Check for built-in variable namespaces (these are namespace constants - pink)
-        if (text.startsWith("barstate.") || text.startsWith("session.") ||
-            text.startsWith("syminfo.") || text.startsWith("timenow")) {
-            return PineScriptTokenTypes.NAMESPACE_CONSTANT;
         }
 
         switch (text) {
@@ -353,8 +364,23 @@ public class PineScriptLexer extends LexerBase {
             case "hline":
             case "fill":
             case "bgcolor":
+            case "barcolor":
             case "alert":
             case "alertcondition":
+            case "time":
+            case "time_close":
+            case "timestamp":
+            case "year":
+            case "month":
+            case "weekofyear":
+            case "dayofmonth":
+            case "dayofweek":
+            case "hour":
+            case "minute":
+            case "second":
+            case "nz":
+            case "fixnan":
+            case "max_bars_back":
                 return PineScriptTokenTypes.BUILTIN_FUNCTION;
 
             // Boolean and special constants
