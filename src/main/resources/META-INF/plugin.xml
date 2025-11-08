@@ -78,6 +78,10 @@
         <!-- Spell checking strategy - disable for PineScript -->
         <spellchecker.support language="PineScript"
                              implementationClass="io.github.houseofai.pinescript.PineScriptSpellcheckingStrategy"/>
+
+        <!-- Parameter info handler -->
+        <codeInsight.parameterInfo language="PineScript"
+                                  implementationClass="io.github.houseofai.pinescript.parameterinfo.PineScriptParameterInfoHandler"/>
     </extensions>
 
     <actions>
