@@ -24,3 +24,4 @@ out/
 # Windows
 Thumbs.db
 .tmp/
+.claude/
