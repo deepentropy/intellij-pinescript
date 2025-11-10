@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <g transform="translate(20, 20)">
+    <!-- Pine tree icon for dark theme with 2px padding, visible area 36x36, tree itself 32x32 -->
+    <g transform="translate(-16, -16)">
+      <!-- Tree top section (lighter green for dark theme) -->
+      <path d="M 16 2 L 8 12 L 11 12 L 5 18 L 9 18 L 3 26 L 16 26 L 29 26 L 23 18 L 27 18 L 21 12 L 24 12 Z"
+            fill="#3DAA6F" stroke="none"/>
+
+      <!-- Tree trunk (lighter brown for dark theme) -->
+      <rect x="13" y="26" width="6" height="6" fill="#8B6F47" stroke="none"/>
+
+      <!-- Highlight accent -->
+      <path d="M 16 4 L 11 10 L 13 10 L 16 6 Z"
+            fill="#5FD890" stroke="none" opacity="0.7"/>
+    </g>
+  </g>
+</svg>
