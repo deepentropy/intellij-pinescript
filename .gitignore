@@ -10,7 +10,8 @@ out/
 *.class
 *.jar
 *.log
-
+nul
+.claude
 # IntelliJ
 *.iml
 *.ipr

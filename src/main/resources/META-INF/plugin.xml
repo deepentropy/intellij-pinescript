@@ -28,6 +28,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <h3>Version 1.0.3 - IDE Compatibility Update</h3>
+      <ul>
+        <li><strong>Extended IDE Support:</strong> Now compatible with IntelliJ IDEA, PyCharm, WebStorm, and other JetBrains IDEs up to version 2025.3</li>
+        <li><strong>Broad Compatibility:</strong> Supports IDE versions from 2023.1 through 2025.3 (builds 231 - 253.*)</li>
+      </ul>
+
       <h3>Version 1.0.0 - PineScript v6 Support</h3>
       <ul>
         <li><strong>PineScript v6 Syntax:</strong> Full support for v6 features including type, enum, method, and switch keywords</li>
