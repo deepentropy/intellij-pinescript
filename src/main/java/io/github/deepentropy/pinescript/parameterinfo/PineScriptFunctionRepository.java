@@ -1,9 +1,9 @@
-package io.github.houseofai.pinescript.parameterinfo;
+package io.github.deepentropy.pinescript.parameterinfo;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.github.houseofai.pinescript.parameterinfo.PineScriptFunctionSignature.Parameter;
+import static io.github.deepentropy.pinescript.parameterinfo.PineScriptFunctionSignature.Parameter;
 
 /**
  * Repository of Pine Script function signatures.

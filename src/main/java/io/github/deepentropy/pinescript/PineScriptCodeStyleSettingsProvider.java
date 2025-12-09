@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript;
+package io.github.deepentropy.pinescript;
 
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;

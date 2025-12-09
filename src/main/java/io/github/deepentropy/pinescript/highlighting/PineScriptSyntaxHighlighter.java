@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.highlighting;
+package io.github.deepentropy.pinescript.highlighting;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -8,8 +8,8 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.ui.JBColor;
-import io.github.houseofai.pinescript.lexer.PineScriptLexer;
-import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.lexer.PineScriptLexer;
+import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;

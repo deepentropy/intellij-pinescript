@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript;
+package io.github.deepentropy.pinescript;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.spellchecker.tokenizer.SpellcheckingStrategy;

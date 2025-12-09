@@ -1,8 +1,8 @@
-package io.github.houseofai.pinescript.lexer;
+package io.github.deepentropy.pinescript.lexer;
 
 import com.intellij.lexer.LexerBase;
 import com.intellij.psi.tree.IElementType;
-import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 
 public class PineScriptLexer extends LexerBase {
     private CharSequence myBuffer;

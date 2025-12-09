@@ -1,10 +1,10 @@
-package io.github.houseofai.pinescript.psi;
+package io.github.deepentropy.pinescript.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
-import io.github.houseofai.pinescript.PineScriptFileType;
-import io.github.houseofai.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.PineScriptFileType;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
 import org.jetbrains.annotations.NotNull;
 
 /**

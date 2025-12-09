@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.10.4"
 }
 
-group = "io.github.houseofai"
+group = "io.github.deepentropy"
 version = "1.0.3"
 
 repositories {

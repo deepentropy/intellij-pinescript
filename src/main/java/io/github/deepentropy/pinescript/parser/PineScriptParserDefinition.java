@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.parser;
+package io.github.deepentropy.pinescript.parser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -10,10 +10,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import io.github.houseofai.pinescript.PineScriptLanguage;
-import io.github.houseofai.pinescript.lexer.PineScriptLexer;
-import io.github.houseofai.pinescript.psi.PineScriptFile;
-import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.lexer.PineScriptLexer;
+import io.github.deepentropy.pinescript.psi.PineScriptFile;
+import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 
 /**

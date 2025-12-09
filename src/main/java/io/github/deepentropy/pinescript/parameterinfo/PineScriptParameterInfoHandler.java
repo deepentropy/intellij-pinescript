@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.parameterinfo;
+package io.github.deepentropy.pinescript.parameterinfo;
 
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
@@ -6,8 +6,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
-import io.github.houseofai.pinescript.PineScriptLanguage;
-import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

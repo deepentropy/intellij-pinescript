@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.hints;
+package io.github.deepentropy.pinescript.hints;
 
 import com.intellij.codeInsight.hints.*;
 import com.intellij.codeInsight.hints.presentation.InlayPresentation;
@@ -8,10 +8,10 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
-import io.github.houseofai.pinescript.PineScriptLanguage;
-import io.github.houseofai.pinescript.parameterinfo.PineScriptFunctionRepository;
-import io.github.houseofai.pinescript.parameterinfo.PineScriptFunctionSignature;
-import io.github.houseofai.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.parameterinfo.PineScriptFunctionRepository;
+import io.github.deepentropy.pinescript.parameterinfo.PineScriptFunctionSignature;
+import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

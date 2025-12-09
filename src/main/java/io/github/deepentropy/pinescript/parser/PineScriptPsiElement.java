@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.parser;
+package io.github.deepentropy.pinescript.parser;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;

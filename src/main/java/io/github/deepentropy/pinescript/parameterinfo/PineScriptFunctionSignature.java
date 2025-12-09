@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.parameterinfo;
+package io.github.deepentropy.pinescript.parameterinfo;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.houseofai.pinescript.highlighting;
+package io.github.deepentropy.pinescript.highlighting;
 
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;

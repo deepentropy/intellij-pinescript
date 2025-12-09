@@ -1,7 +1,7 @@
-package io.github.houseofai.pinescript.psi;
+package io.github.deepentropy.pinescript.psi;
 
 import com.intellij.psi.tree.IElementType;
-import io.github.houseofai.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
 
 public interface PineScriptTokenTypes {
     IElementType KEYWORD = new IElementType("KEYWORD", PineScriptLanguage.INSTANCE);

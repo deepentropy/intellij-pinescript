@@ -1,10 +1,10 @@
-package io.github.houseofai.pinescript.completion;
+package io.github.deepentropy.pinescript.completion;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
-import io.github.houseofai.pinescript.PineScriptLanguage;
+import io.github.deepentropy.pinescript.PineScriptLanguage;
 import org.jetbrains.annotations.NotNull;
 
 public class PineScriptCompletionContributor extends CompletionContributor {
