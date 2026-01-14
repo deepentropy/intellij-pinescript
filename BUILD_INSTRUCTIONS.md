@@ -69,7 +69,7 @@ Once the wrapper is set up:
 
 3. **Find the plugin ZIP:**
    ```
-   build/distributions/pycharm-pinescript-1.0.1.zip
+   build/distributions/intellij-pinescript-1.0.3.zip
    ```
 
 ## Installing the Plugin
@@ -77,7 +77,7 @@ Once the wrapper is set up:
 1. Open IntelliJ IDEA or PyCharm
 2. Go to **Settings** → **Plugins**
 3. Click the **⚙️** icon → **Install Plugin from Disk...**
-4. Select `build/distributions/pycharm-pinescript-1.0.1.zip`
+4. Select `build/distributions/intellij-pinescript-1.0.3.zip`
 5. Click **OK** and **Restart IDE**
 
 ## Testing the Fix

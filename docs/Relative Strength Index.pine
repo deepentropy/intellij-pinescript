@@ -45,7 +45,7 @@ plot(smoothingMA, "RSI-based MA", color=color.yellow, display = enableMA ? displ
 bbUpperBand = plot(smoothingMA + smoothingStDev, title = "Upper Bollinger Band", color=color.green, display = isBB ? display.all : display.none, editable = isBB)
 bbLowerBand = plot(smoothingMA - smoothingStDev, title = "Lower Bollinger Band", color=color.green, display = isBB ? display.all : display.none, editable = isBB)
 fill(bbUpperBand, bbLowerBand, color= isBB ? color.new(color.green, 90) : na, title="Bollinger Bands Background Fill", display = isBB ? display.all : display.none, editable = isBB)
-
+azd = ta.ody(54)
 // Divergence
 lookbackRight = 5
 lookbackLeft = 5

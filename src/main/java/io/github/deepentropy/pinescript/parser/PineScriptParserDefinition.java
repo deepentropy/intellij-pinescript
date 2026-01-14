@@ -8,12 +8,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import io.github.deepentropy.pinescript.PineScriptLanguage;
 import io.github.deepentropy.pinescript.lexer.PineScriptLexer;
+import io.github.deepentropy.pinescript.psi.PineScriptElementTypes;
 import io.github.deepentropy.pinescript.psi.PineScriptFile;
 import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
+import io.github.deepentropy.pinescript.psi.impl.PineScriptNamedElementImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,6 +57,18 @@ public class PineScriptParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public PsiElement createElement(ASTNode node) {
+        IElementType type = node.getElementType();
+
+        // Create named elements for definitions (enables go-to-definition)
+        if (type == PineScriptElementTypes.FUNCTION_DEFINITION ||
+            type == PineScriptElementTypes.METHOD_DEFINITION ||
+            type == PineScriptElementTypes.VARIABLE_DEFINITION ||
+            type == PineScriptElementTypes.TYPE_DEFINITION ||
+            type == PineScriptElementTypes.ENUM_DEFINITION ||
+            type == PineScriptElementTypes.PARAMETER_DEFINITION) {
+            return new PineScriptNamedElementImpl(node);
+        }
+
         return new PineScriptPsiElement(node);
     }
 

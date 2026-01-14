@@ -85,13 +85,35 @@ public class PineScriptInlayParameterHintsProvider implements InlayHintsProvider
 
         @Override
         public boolean collect(@NotNull PsiElement element, @NotNull Editor editor, @NotNull InlayHintsSink sink) {
-            // Only process on complete file parse, not during typing
-            // This prevents interference with autocomplete
             IElementType elementType = element.getNode() != null ? element.getNode().getElementType() : null;
 
-            // Look for arguments in function calls - but only after commas or opening parens
+            // Handle opening parenthesis - show hint for first parameter
+            if (elementType == PineScriptTokenTypes.LPAREN) {
+                // Check if this is a function call (has function name before it)
+                String functionName = getFunctionName(element);
+                if (functionName != null) {
+                    PineScriptFunctionSignature signature = PineScriptFunctionRepository.getSignature(functionName);
+                    if (signature != null && signature.getParameterCount() > 0) {
+                        PsiElement firstArg = getNextNonWhitespace(element);
+                        // Only add hint if there's an argument and it's not a named parameter
+                        if (firstArg != null && !isClosingParen(firstArg) && !isNamedParameter(firstArg)) {
+                            String paramName = signature.getParameters().get(0).getName();
+                            PresentationFactory factory = getFactory();
+                            InlayPresentation presentation = factory.smallText(paramName + ": ");
+
+                            sink.addInlineElement(
+                                firstArg.getTextRange().getStartOffset(),
+                                false,
+                                presentation,
+                                false
+                            );
+                        }
+                    }
+                }
+            }
+
+            // Handle commas - show hint for subsequent parameters
             if (elementType == PineScriptTokenTypes.COMMA) {
-                // After a comma, check what follows
                 PsiElement next = getNextNonWhitespace(element);
                 if (next != null && !isNamedParameter(next)) {
                     FunctionCallInfo callInfo = findFunctionCall(element);
@@ -117,6 +139,14 @@ public class PineScriptInlayParameterHintsProvider implements InlayHintsProvider
             }
 
             return true;
+        }
+
+        private boolean isClosingParen(PsiElement element) {
+            if (element == null) {
+                return false;
+            }
+            IElementType type = element.getNode() != null ? element.getNode().getElementType() : null;
+            return type == PineScriptTokenTypes.RPAREN;
         }
 
         private PsiElement getNextNonWhitespace(PsiElement element) {

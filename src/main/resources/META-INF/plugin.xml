@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>io.github.houseofai.pinescript</id>
     <name>PineScript v6 Language Support</name>
-    <vendor>House of AI</vendor>
+    <vendor>DeepEntropy</vendor>
 
     <description><![CDATA[
       Comprehensive PineScript v6 language support for IntelliJ-based IDEs.
@@ -59,49 +59,74 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Language registration -->
         <lang.parserDefinition language="PineScript"
-                              implementationClass="io.github.deepentropy.pinescript.parser.PineScriptParserDefinition"/>
+                              implementationClass="io.github.houseofai.pinescript.parser.PineScriptParserDefinition"/>
 
         <!-- File type registration -->
         <fileType name="PineScript"
-                  implementationClass="io.github.deepentropy.pinescript.PineScriptFileType"
+                  implementationClass="io.github.houseofai.pinescript.PineScriptFileType"
                   fieldName="INSTANCE"
                   language="PineScript"
                   extensions="pine;pinescript"/>
 
         <!-- Syntax highlighter factory -->
         <lang.syntaxHighlighterFactory language="PineScript"
-                                       implementationClass="io.github.deepentropy.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
+                                       implementationClass="io.github.houseofai.pinescript.highlighting.PineScriptSyntaxHighlighterFactory"/>
 
         <!-- Color settings page -->
-        <colorSettingsPage implementation="io.github.deepentropy.pinescript.highlighting.PineScriptColorSettingsPage"/>
+        <colorSettingsPage implementation="io.github.houseofai.pinescript.highlighting.PineScriptColorSettingsPage"/>
 
         <!-- Completion contributor -->
         <completion.contributor language="PineScript"
-                               implementationClass="io.github.deepentropy.pinescript.completion.PineScriptCompletionContributor"/>
+                               implementationClass="io.github.houseofai.pinescript.completion.PineScriptCompletionContributor"/>
 
         <!-- Bracket matching -->
         <lang.braceMatcher language="PineScript"
-                          implementationClass="io.github.deepentropy.pinescript.PineScriptBraceMatcher"/>
+                          implementationClass="io.github.houseofai.pinescript.PineScriptBraceMatcher"/>
 
         <!-- Quote handler -->
         <lang.quoteHandler language="PineScript"
-                          implementationClass="io.github.deepentropy.pinescript.PineScriptQuoteHandler"/>
+                          implementationClass="io.github.houseofai.pinescript.PineScriptQuoteHandler"/>
 
         <!-- Code style settings -->
         <lang.codeStyleSettingsProvider
-            implementation="io.github.deepentropy.pinescript.PineScriptCodeStyleSettingsProvider"/>
+            implementation="io.github.houseofai.pinescript.PineScriptCodeStyleSettingsProvider"/>
 
         <!-- Spell checking strategy - disable for PineScript -->
         <spellchecker.support language="PineScript"
-                             implementationClass="io.github.deepentropy.pinescript.PineScriptSpellcheckingStrategy"/>
+                             implementationClass="io.github.houseofai.pinescript.PineScriptSpellcheckingStrategy"/>
 
         <!-- Parameter info handler -->
         <codeInsight.parameterInfo language="PineScript"
-                                  implementationClass="io.github.deepentropy.pinescript.parameterinfo.PineScriptParameterInfoHandler"/>
+                                  implementationClass="io.github.houseofai.pinescript.parameterinfo.PineScriptParameterInfoHandler"/>
 
         <!-- Documentation provider (hover docs) -->
         <lang.documentationProvider language="PineScript"
-                                   implementationClass="io.github.deepentropy.pinescript.documentation.PineScriptDocumentationProvider"/>
+                                   implementationClass="io.github.houseofai.pinescript.documentation.PineScriptDocumentationProvider"/>
+
+        <!-- Inlay hints provider (inline parameter hints) -->
+        <codeInsight.inlayProvider language="PineScript"
+                                   implementationClass="io.github.houseofai.pinescript.hints.PineScriptInlayParameterHintsProvider"/>
+
+        <!-- Reference contributor (go-to-definition) -->
+        <psi.referenceContributor language="PineScript"
+                                  implementation="io.github.houseofai.pinescript.psi.PineScriptReferenceContributor"/>
+
+        <!-- Annotator for compile-time validation -->
+        <annotator language="PineScript"
+                   implementationClass="io.github.houseofai.pinescript.annotator.PineScriptAnnotator"/>
+
+        <!-- External annotator for TradingView API compilation -->
+        <externalAnnotator language="PineScript"
+                          implementationClass="io.github.houseofai.pinescript.compiler.PineScriptExternalAnnotator"/>
+
+        <!-- Code inspection -->
+        <localInspection language="PineScript"
+                         shortName="PineScriptInspection"
+                         displayName="PineScript code inspection"
+                         groupName="Pine Script"
+                         enabledByDefault="true"
+                         level="WARNING"
+                         implementationClass="io.github.houseofai.pinescript.inspection.PineScriptInspection"/>
     </extensions>
 
     <actions>

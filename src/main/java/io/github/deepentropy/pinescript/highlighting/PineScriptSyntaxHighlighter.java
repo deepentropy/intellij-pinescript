@@ -16,20 +16,25 @@ import java.awt.Color;
 
 public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    // Syntax highlighting colors
-    private static final Color BLUE_COLOR = new JBColor(new Color(0x5B9CF6), new Color(0x5B9CF6));
-    private static final Color GREEN_COLOR = new JBColor(new Color(0x388E3C), new Color(0x388E3C));
-    private static final Color TEAL_COLOR = new JBColor(new Color(0x42BDA8), new Color(0x42BDA8));
-    private static final Color ORANGE_COLOR = new JBColor(new Color(0xCB6B16), new Color(0xCB6B16));
-    private static final Color PINK_COLOR = new JBColor(new Color(0xE27275), new Color(0xE27275));
-    private static final Color LIGHT_GRAY_COLOR = new JBColor(new Color(0xCACACA), new Color(0xCACACA));
+    // Syntax highlighting colors (light theme, dark theme)
+    private static final Color BLUE_COLOR = new JBColor(new Color(0x0033B3), new Color(0x6897FF));
+    private static final Color GREEN_COLOR = new JBColor(new Color(0x067D17), new Color(0x6AAB73));
+    private static final Color TEAL_COLOR = new JBColor(new Color(0x00838F), new Color(0x42BDA8));
+    private static final Color ORANGE_COLOR = new JBColor(new Color(0xCB6B16), new Color(0xE5A95D));
+    private static final Color PINK_COLOR = new JBColor(new Color(0xC7254E), new Color(0xE27275));
+    private static final Color GRAY_COLOR = new JBColor(new Color(0x6E6E6E), new Color(0xBBBBBB));
 
     // Define text attribute keys for different token types
     public static final TextAttributesKey KEYWORD =
         TextAttributesKey.createTextAttributesKey("PINE_KEYWORD",
             new TextAttributes(BLUE_COLOR, null, null, null, 0));
 
-    // Storage keywords (var, varip, const) use teal color
+    // Type keywords (int, float, bool, string, color, etc.) use green color
+    public static final TextAttributesKey TYPE_KEYWORD =
+        TextAttributesKey.createTextAttributesKey("PINE_TYPE_KEYWORD",
+            new TextAttributes(GREEN_COLOR, null, null, null, 0));
+
+    // Storage keywords (const) use teal color
     public static final TextAttributesKey STORAGE_KEYWORD =
         TextAttributesKey.createTextAttributesKey("PINE_STORAGE_KEYWORD",
             new TextAttributes(TEAL_COLOR, null, null, null, 0));
@@ -74,10 +79,10 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     public static final TextAttributesKey ANNOTATION =
         TextAttributesKey.createTextAttributesKey("PINE_ANNOTATION", DefaultLanguageHighlighterColors.DOC_COMMENT);
 
-    // Variable names use light gray
+    // Variable names use gray
     public static final TextAttributesKey IDENTIFIER =
         TextAttributesKey.createTextAttributesKey("PINE_IDENTIFIER",
-            new TextAttributes(LIGHT_GRAY_COLOR, null, null, null, 0));
+            new TextAttributes(GRAY_COLOR, null, null, null, 0));
 
     public static final TextAttributesKey OPERATOR =
         TextAttributesKey.createTextAttributesKey("PINE_OPERATOR",
@@ -94,6 +99,7 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] EMPTY = new TextAttributesKey[0];
 
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] TYPE_KEYWORD_KEYS = new TextAttributesKey[]{TYPE_KEYWORD};
     private static final TextAttributesKey[] STORAGE_KEYWORD_KEYS = new TextAttributesKey[]{STORAGE_KEYWORD};
     private static final TextAttributesKey[] BOOLEAN_KEYS = new TextAttributesKey[]{BOOLEAN};
     private static final TextAttributesKey[] NAMESPACE_CONSTANT_KEYS = new TextAttributesKey[]{NAMESPACE_CONSTANT};
@@ -120,6 +126,8 @@ public class PineScriptSyntaxHighlighter extends SyntaxHighlighterBase {
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
         if (tokenType == PineScriptTokenTypes.KEYWORD) {
             return KEYWORD_KEYS;
+        } else if (tokenType == PineScriptTokenTypes.TYPE_KEYWORD) {
+            return TYPE_KEYWORD_KEYS;
         } else if (tokenType == PineScriptTokenTypes.STORAGE_KEYWORD) {
             return STORAGE_KEYWORD_KEYS;
         } else if (tokenType == PineScriptTokenTypes.BOOLEAN) {

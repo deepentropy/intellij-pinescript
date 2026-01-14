@@ -5,6 +5,7 @@ import io.github.deepentropy.pinescript.PineScriptLanguage;
 
 public interface PineScriptTokenTypes {
     IElementType KEYWORD = new IElementType("KEYWORD", PineScriptLanguage.INSTANCE);
+    IElementType TYPE_KEYWORD = new IElementType("TYPE_KEYWORD", PineScriptLanguage.INSTANCE);
     IElementType STORAGE_KEYWORD = new IElementType("STORAGE_KEYWORD", PineScriptLanguage.INSTANCE);
     IElementType BOOLEAN = new IElementType("BOOLEAN", PineScriptLanguage.INSTANCE);
     IElementType NAMESPACE_CONSTANT = new IElementType("NAMESPACE_CONSTANT", PineScriptLanguage.INSTANCE);

@@ -85,7 +85,6 @@ public class PineScriptCompletionContributor extends CompletionContributor {
             {"tsi", "True Strength Index"},
             {"obv", "On Balance Volume"},
             {"cum", "Cumulative (total sum)"},
-            {"sma", "Simple Moving Average"},
             {"change", "Difference between current and previous value"},
             {"correlation", "Correlation coefficient"},
             {"stdev", "Standard Deviation"},

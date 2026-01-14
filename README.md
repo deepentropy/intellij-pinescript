@@ -114,7 +114,7 @@ Over **500+ autocomplete items** covering all major PineScript namespaces:
 6. Restart the IDE
 
 ### Option 2: Install from Disk
-1. Download the latest `.zip` file from the [Releases](https://github.com/yourusername/pycharm-pinescript/releases) page
+1. Download the latest `.zip` file from the [Releases](https://github.com/deepentropy/intellij-pinescript/releases) page
 2. Open PyCharm or IntelliJ IDEA
 3. Go to **File** → **Settings** → **Plugins**
 4. Click the gear icon ⚙️ and select **Install Plugin from Disk...**
@@ -152,8 +152,8 @@ See the **Building the Plugin** section below.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/pycharm-pinescript.git
-   cd pycharm-pinescript
+   git clone https://github.com/deepentropy/intellij-pinescript.git
+   cd intellij-pinescript
    ```
 
 2. **Generate Gradle Wrapper** (if not present)
@@ -175,7 +175,7 @@ See the **Building the Plugin** section below.
 
    The plugin `.zip` file will be created in:
    ```
-   build/distributions/pycharm-pinescript-1.0.0.zip
+   build/distributions/intellij-pinescript-1.0.3.zip
    ```
 
 ### Build Troubleshooting
@@ -283,15 +283,15 @@ javac -d build/classes/java/main \
 
 # Create JAR
 cd build/classes/java/main
-jar cvf ../../../../pycharm-pinescript.jar .
+jar cvf ../../../../intellij-pinescript.jar .
 cd ../../../..
 
 # Package as plugin (create META-INF and add plugin.xml)
 mkdir -p plugin/lib
-cp pycharm-pinescript.jar plugin/lib/
+cp intellij-pinescript.jar plugin/lib/
 cp plugin.xml plugin/META-INF/
 cd plugin
-zip -r ../pycharm-pinescript-1.0.0.zip .
+zip -r ../intellij-pinescript-1.0.3.zip .
 ```
 
 ## Integration into PyCharm IDE
@@ -420,8 +420,8 @@ plot(ma)
 ## Project Structure
 
 ```
-pycharm-pinescript/
-├── src/main/java/com/tradingview/pinescript/
+intellij-pinescript/
+├── src/main/java/io/github/deepentropy/pinescript/
 │   ├── PineScriptLanguage.java           # Core language definition
 │   ├── PineScriptFileType.java           # File type registration
 │   ├── PineScriptBraceMatcher.java       # Bracket matching
@@ -437,15 +437,9 @@ pycharm-pinescript/
 │   │   └── PineScriptColorSettingsPage.java
 │   └── completion/
 │       └── PineScriptCompletionContributor.java
-├── docs/reference/                        # PineScript v6 reference docs
-│   ├── keywords/                          # Language keywords
-│   ├── functions/                         # Built-in functions
-│   ├── variables/                         # Built-in variables
-│   ├── constants/                         # Constants
-│   ├── types/                             # Type definitions
-│   ├── annotations/                       # Annotation docs
-│   └── operators/                         # Operators
-├── plugin.xml                             # Plugin configuration
+├── docs/markdown/built-in-indicators/     # Indicator documentation
+├── src/main/resources/META-INF/
+│   └── plugin.xml                         # Plugin configuration
 ├── build.gradle.kts                       # Build configuration
 ├── settings.gradle.kts                    # Gradle settings
 └── README.md                              # This file
@@ -500,8 +494,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/pycharm-pinescript/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/pycharm-pinescript/discussions)
+- **Issues**: [GitHub Issues](https://github.com/deepentropy/intellij-pinescript/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/deepentropy/intellij-pinescript/discussions)
 - **Documentation**: [PineScript v6 Reference](https://www.tradingview.com/pine-script-docs/)
 
 ## Version History

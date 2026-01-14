@@ -1,22 +1,31 @@
 package io.github.deepentropy.pinescript.documentation;
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
-import io.github.deepentropy.pinescript.parameterinfo.PineScriptFunctionRepository;
-import io.github.deepentropy.pinescript.parameterinfo.PineScriptFunctionSignature;
 import io.github.deepentropy.pinescript.psi.PineScriptTokenTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides documentation for Pine Script functions when hovering over them.
+ * Shows documentation similar to TradingView's popup style.
  */
 public class PineScriptDocumentationProvider extends AbstractDocumentationProvider {
 
+    // Dark theme colors similar to TradingView
+    private static final String COLOR_FUNCTION = "#4EC9B0";      // Teal for function names
+    private static final String COLOR_TYPE = "#4EC9B0";          // Teal for types
+    private static final String COLOR_KEYWORD = "#569CD6";       // Blue for keywords
+    private static final String COLOR_PARAM = "#9CDCFE";         // Light blue for parameters
+    private static final String COLOR_STRING = "#CE9178";        // Orange for strings
+    private static final String COLOR_COMMENT = "#6A9955";       // Green for comments
+    private static final String COLOR_SECTION = "#DCDCAA";       // Yellow for section headers
+
     @Override
     public @Nullable String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
-        // Try originalElement first, then element
         PsiElement targetElement = originalElement != null ? originalElement : element;
 
         if (targetElement == null) {
@@ -24,6 +33,7 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
         }
 
         IElementType elementType = targetElement.getNode() != null ? targetElement.getNode().getElementType() : null;
+        String elementText = targetElement.getText();
 
         // Check if this is a function identifier or builtin function
         if (elementType == PineScriptTokenTypes.BUILTIN_FUNCTION ||
@@ -31,33 +41,37 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
 
             String functionName = getFunctionName(targetElement);
             if (functionName != null) {
-                PineScriptFunctionSignature signature = PineScriptFunctionRepository.getSignature(functionName);
-                if (signature != null) {
-                    return formatDocumentation(signature);
+                // Try to get documentation from repository
+                PineScriptDocumentationRepository.FunctionDoc doc =
+                    PineScriptDocumentationRepository.getDocumentation(functionName);
+
+                if (doc != null) {
+                    return formatDocumentation(doc);
                 }
 
-                // If no signature found, still show basic info for known functions
-                String description = getDescription(functionName);
-                if (description != null) {
-                    return formatBasicDocumentation(functionName, description);
-                }
+                // Fallback: show basic info even without full docs
+                return formatBasicDoc(functionName, elementType.toString());
             }
+        }
+
+        // Debug fallback - show what element we're seeing
+        if (elementType != null && elementType != PineScriptTokenTypes.WHITE_SPACE) {
+            return "<html><body><b>Element:</b> " + escapeHtml(elementText) +
+                   "<br/><b>Type:</b> " + elementType.toString() + "</body></html>";
         }
 
         return null;
     }
 
     /**
-     * Format basic documentation without signature
+     * Format basic documentation when full docs aren't available.
      */
-    private String formatBasicDocumentation(String functionName, String description) {
+    private String formatBasicDoc(String functionName, String elementType) {
         StringBuilder html = new StringBuilder();
         html.append("<html><body>");
-        html.append("<b>").append(functionName).append("</b>");
-        html.append("<br/><br/>");
-        html.append("<div style='margin-top: 8px;'>");
-        html.append(description);
-        html.append("</div>");
+        html.append("<div style='color:#4EC9B0; font-weight:bold; font-size:14px;'>").append(escapeHtml(functionName)).append("</div>");
+        html.append("<div style='color:#888;'>(built-in function)</div>");
+        html.append("<br/><div style='color:#aaa;'>Documentation not available for this function.</div>");
         html.append("</body></html>");
         return html.toString();
     }
@@ -74,24 +88,29 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
 
     @Override
     public @Nullable String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        // Show quick info in a smaller popup
         return generateDoc(element, originalElement);
     }
 
+    @Override
+    public @Nullable PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement, int targetOffset) {
+        // Return the element at cursor position for documentation lookup
+        if (contextElement != null) {
+            return contextElement;
+        }
+        return file.findElementAt(targetOffset);
+    }
+
     /**
-     * Get the full function name including namespace (e.g., "ta.sma") using text analysis
+     * Get the full function name including namespace (e.g., "ta.sma")
      */
     private String getFunctionName(PsiElement element) {
         if (element == null) {
             return null;
         }
 
-        // Get the text and offset
         String fileText = element.getContainingFile().getText();
-        int endOffset = element.getTextRange().getEndOffset();
         int startOffset = element.getTextRange().getStartOffset();
 
-        // Build function name by reading backwards to include namespace
         StringBuilder fullName = new StringBuilder(element.getText());
 
         // Check if there's a dot before this element (namespace separator)
@@ -101,16 +120,13 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
         }
 
         if (i >= 0 && fileText.charAt(i) == '.') {
-            // Found a dot, read the namespace
             fullName.insert(0, '.');
             i--;
 
-            // Skip whitespace before namespace
             while (i >= 0 && Character.isWhitespace(fileText.charAt(i))) {
                 i--;
             }
 
-            // Read namespace identifier
             StringBuilder namespace = new StringBuilder();
             while (i >= 0 && (Character.isLetterOrDigit(fileText.charAt(i)) || fileText.charAt(i) == '_')) {
                 namespace.insert(0, fileText.charAt(i));
@@ -124,48 +140,71 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
     }
 
     /**
-     * Format the function signature into HTML documentation
+     * Format the documentation into HTML similar to TradingView style.
      */
-    private String formatDocumentation(PineScriptFunctionSignature signature) {
+    private String formatDocumentation(PineScriptDocumentationRepository.FunctionDoc doc) {
         StringBuilder html = new StringBuilder();
 
-        html.append("<html><body>");
-        html.append("<b>").append(signature.getFunctionName()).append("</b>");
-        html.append("(");
+        html.append("<html><head>");
+        html.append("<style>");
+        html.append("body { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; }");
+        html.append(".function-name { color: ").append(COLOR_FUNCTION).append("; font-weight: bold; font-size: 14px; }");
+        html.append(".type { color: ").append(COLOR_TYPE).append("; }");
+        html.append(".section { color: ").append(COLOR_SECTION).append("; font-weight: bold; margin-top: 12px; margin-bottom: 4px; }");
+        html.append(".param-name { color: ").append(COLOR_PARAM).append("; }");
+        html.append(".code { font-family: 'JetBrains Mono', Consolas, monospace; }");
+        html.append("pre { background-color: #2d2d2d; padding: 8px; border-radius: 4px; overflow-x: auto; }");
+        html.append("</style>");
+        html.append("</head><body>");
 
-        // Add parameters
-        for (int i = 0; i < signature.getParameterCount(); i++) {
-            if (i > 0) {
-                html.append(", ");
-            }
-            PineScriptFunctionSignature.Parameter param = signature.getParameters().get(i);
+        // Function name with type indicator
+        html.append("<div class='function-name'>").append(escapeHtml(doc.getName())).append("</div>");
+        html.append("<div style='color: #888; margin-bottom: 8px;'>(built-in function)</div>");
 
-            if (param.isOptional()) {
-                html.append("<i>");
-            }
-
-            html.append(param.getName());
-            if (param.getType() != null && !param.getType().isEmpty()) {
-                html.append(": <code>").append(param.getType()).append("</code>");
-            }
-
-            if (param.getDefaultValue() != null) {
-                html.append(" = <code>").append(param.getDefaultValue()).append("</code>");
-            }
-
-            if (param.isOptional()) {
-                html.append("</i>");
-            }
+        // Description
+        if (doc.getDescription() != null && !doc.getDescription().isEmpty()) {
+            html.append("<div style='margin-bottom: 12px;'>");
+            html.append(formatDescription(doc.getDescription()));
+            html.append("</div>");
         }
 
-        html.append(")");
+        // Syntax section
+        if (doc.getSyntax() != null && !doc.getSyntax().isEmpty()) {
+            html.append("<div class='section'>Syntax</div>");
+            html.append("<div class='code'>");
+            html.append(formatSyntax(doc.getSyntax()));
+            html.append("</div>");
+        }
 
-        // Add description based on function name
-        String description = getDescription(signature.getFunctionName());
-        if (description != null) {
-            html.append("<br/><br/>");
-            html.append("<div style='margin-top: 8px;'>");
-            html.append(description);
+        // Arguments section
+        if (doc.getArguments() != null && !doc.getArguments().isEmpty()) {
+            html.append("<div class='section'>Arguments</div>");
+            html.append("<div style='margin-left: 8px;'>");
+            html.append(formatArguments(doc.getArguments()));
+            html.append("</div>");
+        }
+
+        // Returns section
+        if (doc.getReturns() != null && !doc.getReturns().isEmpty()) {
+            html.append("<div class='section'>Returns</div>");
+            html.append("<div style='margin-left: 8px;'>");
+            html.append(escapeHtml(doc.getReturns()));
+            html.append("</div>");
+        }
+
+        // Remarks section
+        if (doc.getRemarks() != null && !doc.getRemarks().isEmpty()) {
+            html.append("<div class='section'>Remarks</div>");
+            html.append("<div style='margin-left: 8px; color: #aaa;'>");
+            html.append(formatDescription(doc.getRemarks()));
+            html.append("</div>");
+        }
+
+        // See also section
+        if (doc.getSeeAlso() != null && !doc.getSeeAlso().isEmpty()) {
+            html.append("<div class='section'>See also</div>");
+            html.append("<div style='margin-left: 8px;'>");
+            html.append(formatSeeAlso(doc.getSeeAlso()));
             html.append("</div>");
         }
 
@@ -175,62 +214,114 @@ public class PineScriptDocumentationProvider extends AbstractDocumentationProvid
     }
 
     /**
-     * Get description for common functions
+     * Format the syntax with syntax highlighting.
      */
-    private String getDescription(String functionName) {
-        return switch (functionName) {
-            case "plot" -> "Plots a series of data on the chart.";
-            case "plotshape" -> "Plots visual shapes on the chart.";
-            case "plotchar" -> "Plots a character on the chart.";
-            case "hline" -> "Renders a horizontal line at a given fixed price level.";
-            case "fill" -> "Fills the background between two plots or hlines.";
-            case "bgcolor" -> "Colors the background of the bars.";
-            case "indicator" -> "Declares the study and sets its properties.";
-            case "strategy" -> "Declares the strategy and sets its properties.";
-            case "ta.sma" -> "Simple Moving Average - calculates the arithmetic mean of values over a specified period.";
-            case "ta.ema" -> "Exponential Moving Average - gives more weight to recent values.";
-            case "ta.rsi" -> "Relative Strength Index - momentum oscillator measuring speed and magnitude of price changes.";
-            case "ta.macd" -> "Moving Average Convergence Divergence - trend-following momentum indicator.";
-            case "ta.atr" -> "Average True Range - measures market volatility.";
-            case "ta.bb" -> "Bollinger Bands - volatility bands placed above and below a moving average.";
-            case "ta.stoch" -> "Stochastic Oscillator - momentum indicator comparing closing price to price range.";
-            case "ta.crossover" -> "Returns true when series1 crosses over series2.";
-            case "ta.crossunder" -> "Returns true when series1 crosses under series2.";
-            case "ta.change" -> "Returns the difference between the current value and its value n bars ago.";
-            case "ta.highest" -> "Returns the highest value for a given number of bars back.";
-            case "ta.lowest" -> "Returns the lowest value for a given number of bars back.";
-            case "input.int" -> "Adds an integer input to the script settings.";
-            case "input.float" -> "Adds a float input to the script settings.";
-            case "input.bool" -> "Adds a boolean input to the script settings.";
-            case "input.string" -> "Adds a string input to the script settings.";
-            case "input.source" -> "Adds a source input to the script settings.";
-            case "input.color" -> "Adds a color input to the script settings.";
-            case "math.max" -> "Returns the greatest of two values.";
-            case "math.min" -> "Returns the smallest of two values.";
-            case "math.abs" -> "Returns the absolute value of a number.";
-            case "math.round" -> "Rounds a number to the nearest integer or to a specified precision.";
-            case "math.floor" -> "Rounds a number down to the nearest integer.";
-            case "math.ceil" -> "Rounds a number up to the nearest integer.";
-            case "array.new_float" -> "Creates a new float array.";
-            case "array.get" -> "Returns the value at a specified index in an array.";
-            case "array.set" -> "Sets the value at a specified index in an array.";
-            case "array.push" -> "Appends a value to the end of an array.";
-            case "array.size" -> "Returns the number of elements in an array.";
-            case "request.security" -> "Requests data from another symbol or timeframe.";
-            case "alert" -> "Creates an alert event.";
-            case "alertcondition" -> "Creates an alert condition.";
-            case "strategy.entry" -> "Generates a strategy entry order.";
-            case "strategy.exit" -> "Generates a strategy exit order.";
-            case "strategy.close" -> "Closes market position.";
-            default -> null;
-        };
+    private String formatSyntax(String syntax) {
+        String escaped = escapeHtml(syntax);
+
+        // Highlight the function name (before the parenthesis)
+        escaped = escaped.replaceAll("^([a-zA-Z_][a-zA-Z0-9_.]*)(\\()",
+                "<span style='color:" + COLOR_FUNCTION + "'>$1</span>$2");
+
+        // Highlight return type (after ->)
+        escaped = escaped.replaceAll("→\\s*([a-zA-Z_<>\\[\\]/]+)",
+                "→ <span style='color:" + COLOR_TYPE + "'>$1</span>");
+
+        // Highlight types in angle brackets
+        escaped = escaped.replaceAll("&lt;([^&]+)&gt;",
+                "&lt;<span style='color:" + COLOR_TYPE + "'>$1</span>&gt;");
+
+        return escaped;
     }
 
-    private boolean isWhitespace(PsiElement element) {
-        if (element == null) {
-            return false;
+    /**
+     * Format arguments with parameter highlighting.
+     */
+    private String formatArguments(String arguments) {
+        StringBuilder html = new StringBuilder();
+        String[] lines = arguments.split("\n\n");
+
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            // Match: paramName (type) Description
+            if (line.matches("^[a-zA-Z_][a-zA-Z0-9_]*\\s*\\(.*")) {
+                int parenStart = line.indexOf('(');
+                int parenEnd = line.indexOf(')');
+
+                if (parenStart > 0 && parenEnd > parenStart) {
+                    String paramName = line.substring(0, parenStart).trim();
+                    String type = line.substring(parenStart + 1, parenEnd).trim();
+                    String desc = parenEnd + 1 < line.length() ? line.substring(parenEnd + 1).trim() : "";
+
+                    html.append("<div style='margin-bottom: 6px;'>");
+                    html.append("<span class='param-name'>").append(escapeHtml(paramName)).append("</span>");
+                    html.append(" <span style='color:#888'>(</span>");
+                    html.append("<span class='type'>").append(escapeHtml(type)).append("</span>");
+                    html.append("<span style='color:#888'>)</span>");
+                    if (!desc.isEmpty()) {
+                        html.append(" ").append(escapeHtml(desc));
+                    }
+                    html.append("</div>");
+                } else {
+                    html.append("<div style='margin-bottom: 6px;'>").append(escapeHtml(line)).append("</div>");
+                }
+            } else {
+                html.append("<div style='margin-bottom: 6px;'>").append(escapeHtml(line)).append("</div>");
+            }
         }
-        IElementType type = element.getNode() != null ? element.getNode().getElementType() : null;
-        return type == PineScriptTokenTypes.WHITE_SPACE;
+
+        return html.toString();
+    }
+
+    /**
+     * Format description, handling markdown-like syntax.
+     */
+    private String formatDescription(String description) {
+        String text = escapeHtml(description);
+
+        // Handle inline code
+        text = text.replaceAll("`([^`]+)`",
+                "<code style='background:#2d2d2d; padding:1px 4px; border-radius:2px;'>$1</code>");
+
+        // Handle bold
+        text = text.replaceAll("\\*\\*([^*]+)\\*\\*", "<b>$1</b>");
+
+        // Convert newlines to <br>
+        text = text.replace("\n", "<br>");
+
+        return text;
+    }
+
+    /**
+     * Format see also links.
+     */
+    private String formatSeeAlso(String seeAlso) {
+        String[] funcs = seeAlso.split(",\\s*");
+        StringBuilder html = new StringBuilder();
+
+        for (int i = 0; i < funcs.length; i++) {
+            if (i > 0) {
+                html.append(", ");
+            }
+            String func = funcs[i].trim();
+            html.append("<span style='color:").append(COLOR_FUNCTION).append("'>").append(escapeHtml(func)).append("</span>");
+        }
+
+        return html.toString();
+    }
+
+    /**
+     * Escape HTML special characters.
+     */
+    private String escapeHtml(String text) {
+        if (text == null) return "";
+        return text
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
 }

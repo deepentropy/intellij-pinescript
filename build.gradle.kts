@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.intellij.platform") version "2.10.4"
 }
 
-group = "io.github.deepentropy"
-version = "1.0.3"
+group = "io.github.houseofai"
+version = "1.0.4"
 
 repositories {
     mavenCentral()
@@ -19,14 +19,16 @@ dependencies {
     intellijPlatform {
         intellijIdeaCommunity("2024.1.7")
         bundledPlugins("com.intellij.java")
+        testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
     }
+    testImplementation("junit:junit:4.13.2")
 }
 
 intellijPlatform {
     pluginConfiguration {
         id = "io.github.houseofai.pinescript"
         name = "PineScript v6 Language Support"
-        version = "1.0.3"
+        version = "1.0.4"
 
         ideaVersion {
             sinceBuild = "231"

@@ -13,9 +13,10 @@ import javax.swing.*;
 public class PineScriptColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
         new AttributesDescriptor("Keyword", PineScriptSyntaxHighlighter.KEYWORD),
-        new AttributesDescriptor("Storage Keyword (var, varip, const)", PineScriptSyntaxHighlighter.STORAGE_KEYWORD),
+        new AttributesDescriptor("Type (int, float, bool, string, color, ...)", PineScriptSyntaxHighlighter.TYPE_KEYWORD),
+        new AttributesDescriptor("Storage Keyword (const)", PineScriptSyntaxHighlighter.STORAGE_KEYWORD),
         new AttributesDescriptor("Boolean (true, false)", PineScriptSyntaxHighlighter.BOOLEAN),
-        new AttributesDescriptor("Namespace Constant (format.*, display.*)", PineScriptSyntaxHighlighter.NAMESPACE_CONSTANT),
+        new AttributesDescriptor("Namespace Constant (format.*, display.*, color.*)", PineScriptSyntaxHighlighter.NAMESPACE_CONSTANT),
         new AttributesDescriptor("Constant (na)", PineScriptSyntaxHighlighter.CONSTANT),
         new AttributesDescriptor("Built-in Function", PineScriptSyntaxHighlighter.BUILTIN_FUNCTION),
         new AttributesDescriptor("Parameter Name", PineScriptSyntaxHighlighter.PARAMETER_NAME),

@@ -95,16 +95,18 @@ public class PineScriptLexer extends LexerBase {
         // Handle block comments
         if (c == '/' && myCurrentOffset + 1 < myEndOffset && myBuffer.charAt(myCurrentOffset + 1) == '*') {
             myCurrentOffset += 2;
+            boolean terminated = false;
             while (myCurrentOffset < myEndOffset) {
                 if (myCurrentOffset + 1 < myEndOffset &&
                     myBuffer.charAt(myCurrentOffset) == '*' &&
                     myBuffer.charAt(myCurrentOffset + 1) == '/') {
                     myCurrentOffset += 2;
+                    terminated = true;
                     break;
                 }
                 myCurrentOffset++;
             }
-            myTokenType = PineScriptTokenTypes.COMMENT;
+            myTokenType = terminated ? PineScriptTokenTypes.COMMENT : PineScriptTokenTypes.BAD_CHARACTER;
             return;
         }
 
@@ -112,10 +114,16 @@ public class PineScriptLexer extends LexerBase {
         if (c == '"' || c == '\'') {
             char quote = c;
             myCurrentOffset++;
+            boolean terminated = false;
             while (myCurrentOffset < myEndOffset) {
                 char ch = myBuffer.charAt(myCurrentOffset);
+                if (ch == '\n') {
+                    // Newline without closing quote - unterminated string
+                    break;
+                }
                 if (ch == quote) {
                     myCurrentOffset++;
+                    terminated = true;
                     break;
                 }
                 if (ch == '\\' && myCurrentOffset + 1 < myEndOffset) {
@@ -124,7 +132,7 @@ public class PineScriptLexer extends LexerBase {
                     myCurrentOffset++;
                 }
             }
-            myTokenType = PineScriptTokenTypes.STRING;
+            myTokenType = terminated ? PineScriptTokenTypes.STRING : PineScriptTokenTypes.BAD_CHARACTER;
             return;
         }
 
@@ -184,7 +192,12 @@ public class PineScriptLexer extends LexerBase {
             String text = myBuffer.subSequence(myTokenStart, myCurrentOffset).toString();
             myTokenType = getKeywordTokenType(text);
             if (myTokenType == null) {
-                myTokenType = PineScriptTokenTypes.IDENTIFIER;
+                // Check if this identifier is followed by '(' - makes it a function call
+                if (isFollowedByOpenParen()) {
+                    myTokenType = PineScriptTokenTypes.BUILTIN_FUNCTION;
+                } else {
+                    myTokenType = PineScriptTokenTypes.IDENTIFIER;
+                }
             }
             return;
         }
@@ -286,8 +299,14 @@ public class PineScriptLexer extends LexerBase {
     }
 
     private IElementType getKeywordTokenType(String text) {
-        // Check for color constants (color.red, color.green, etc.) - blue
+        // Check for color.* - functions are blue, color constants are pink
         if (text.startsWith("color.")) {
+            String colorPart = text.substring(6);
+            // Color constants (color.red, color.green, etc.) - pink
+            if (isColorConstant(colorPart)) {
+                return PineScriptTokenTypes.NAMESPACE_CONSTANT;
+            }
+            // Color functions (color.rgb, color.new, color.from_gradient) - blue
             return PineScriptTokenTypes.BUILTIN_FUNCTION;
         }
 
@@ -297,26 +316,26 @@ public class PineScriptLexer extends LexerBase {
             text.startsWith("extend.") || text.startsWith("shape.") ||
             text.startsWith("location.") || text.startsWith("xloc.") ||
             text.startsWith("yloc.") || text.startsWith("plot.style_") ||
-            text.startsWith("hline.style_") || text.startsWith("line.style_")) {
+            text.startsWith("hline.style_") || text.startsWith("line.style_") ||
+            text.startsWith("label.style_") || text.startsWith("scale.")) {
             return PineScriptTokenTypes.NAMESPACE_CONSTANT;
         }
 
-        // Check for built-in variable namespaces first (these are namespace constants - pink)
+        // Check for built-in variable namespaces (these are namespace constants - pink)
         if (text.startsWith("barstate.") || text.startsWith("session.") ||
+            text.startsWith("dayofweek.") || text.startsWith("adjustment.") ||
+            text.startsWith("currency.") || text.startsWith("earnings.") ||
+            text.startsWith("dividends.") || text.startsWith("splits.") ||
             text.equals("timenow")) {
             return PineScriptTokenTypes.NAMESPACE_CONSTANT;
         }
 
-        // Check for syminfo - it has both functions and variables
-        // Most common ones are variables, but ticker() and prefix() are functions
+        // Check for syminfo.* - mostly constants (pink)
         if (text.startsWith("syminfo.")) {
-            if (text.equals("syminfo.ticker") || text.equals("syminfo.prefix")) {
-                return PineScriptTokenTypes.BUILTIN_FUNCTION;
-            }
             return PineScriptTokenTypes.NAMESPACE_CONSTANT;
         }
 
-        // Check for built-in function namespaces (input., ta., math., etc.)
+        // Check for built-in function namespaces (input., ta., math., etc.) - blue
         if (text.startsWith("input.") || text.startsWith("ta.") || text.startsWith("math.") ||
             text.startsWith("request.") ||
             text.startsWith("array.") || text.startsWith("matrix.") || text.startsWith("map.") ||
@@ -329,7 +348,7 @@ public class PineScriptLexer extends LexerBase {
         }
 
         switch (text) {
-            // Control flow keywords
+            // Control flow keywords - blue
             case "if":
             case "else":
             case "for":
@@ -338,23 +357,23 @@ public class PineScriptLexer extends LexerBase {
             case "break":
             case "continue":
             case "return":
-            // Declaration keywords
+            // Declaration keywords - blue
             case "function":
             case "method":
             case "var":
             case "varip":
             case "type":
             case "enum":
-            // Module keywords
+            // Module keywords - blue
             case "import":
             case "export":
-            // Script type keywords
+                return PineScriptTokenTypes.KEYWORD;
+
+            // Script type declarations (also function-like) - blue
             case "indicator":
             case "strategy":
             case "library":
-                return PineScriptTokenTypes.KEYWORD;
-
-            // Built-in standalone functions
+            // Built-in standalone functions - blue
             case "plot":
             case "plotshape":
             case "plotchar":
@@ -380,25 +399,24 @@ public class PineScriptLexer extends LexerBase {
             case "second":
             case "nz":
             case "fixnan":
-            case "max_bars_back":
                 return PineScriptTokenTypes.BUILTIN_FUNCTION;
 
-            // Boolean and special constants
+            // Boolean constants - pink
             case "true":
             case "false":
                 return PineScriptTokenTypes.BOOLEAN;
 
-            // Other constants - orange
+            // Special constant - pink
             case "na":
                 return PineScriptTokenTypes.CONSTANT;
 
-            // Logical operators (v6 style)
+            // Logical operators (v6 style) - teal
             case "and":
             case "or":
             case "not":
                 return PineScriptTokenTypes.OPERATOR;
 
-            // Type keywords
+            // Type keywords - green
             case "int":
             case "float":
             case "bool":
@@ -407,12 +425,65 @@ public class PineScriptLexer extends LexerBase {
             case "array":
             case "matrix":
             case "map":
-                return PineScriptTokenTypes.KEYWORD;
+            case "series":
+            case "simple":
+            case "label":
+            case "line":
+            case "box":
+            case "table":
+            case "linefill":
+            case "polyline":
+                return PineScriptTokenTypes.TYPE_KEYWORD;
 
-            // Storage keywords
+            // Storage keywords - teal
             case "const":
                 return PineScriptTokenTypes.STORAGE_KEYWORD;
         }
         return null;
+    }
+
+    /**
+     * Check if the current position is followed by '(' (possibly with whitespace in between).
+     * This is used to detect function calls.
+     */
+    private boolean isFollowedByOpenParen() {
+        int pos = myCurrentOffset;
+        // Skip whitespace
+        while (pos < myEndOffset) {
+            char ch = myBuffer.charAt(pos);
+            if (ch == ' ' || ch == '\t') {
+                pos++;
+            } else if (ch == '(') {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private boolean isColorConstant(String name) {
+        switch (name) {
+            case "aqua":
+            case "black":
+            case "blue":
+            case "fuchsia":
+            case "gray":
+            case "green":
+            case "lime":
+            case "maroon":
+            case "navy":
+            case "olive":
+            case "orange":
+            case "purple":
+            case "red":
+            case "silver":
+            case "teal":
+            case "white":
+            case "yellow":
+                return true;
+            default:
+                return false;
+        }
     }
 }
