@@ -28,6 +28,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <h3>Version 1.0.5 - Bug Fix &amp; Live Compilation</h3>
+      <ul>
+        <li><strong>Critical Bug Fix:</strong> Fixed ClassNotFoundException that caused IDE restart prompts during indexing (issue from v1.0.4)</li>
+        <li><strong>Live Compilation:</strong> Added real-time code validation using the PineScript public API for instant error feedback</li>
+      </ul>
+
       <h3>Version 1.0.3 - IDE Compatibility Update</h3>
       <ul>
         <li><strong>Extended IDE Support:</strong> Now compatible with IntelliJ IDEA, PyCharm, WebStorm, and other JetBrains IDEs up to version 2025.3</li>
