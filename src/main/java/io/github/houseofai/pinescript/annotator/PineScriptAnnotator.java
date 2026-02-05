@@ -110,7 +110,7 @@ public class PineScriptAnnotator implements Annotator {
 
         // Only perform file-level checks once (on the first element)
         if (element.equals(file.getFirstChild())) {
-            performFileValidation(file, holder);
+            performFileValidation(file, element, holder);
         }
 
         // Element-level checks
@@ -158,8 +158,9 @@ public class PineScriptAnnotator implements Annotator {
     /**
      * Perform file-level validation checks
      */
-    private void performFileValidation(PsiFile file, AnnotationHolder holder) {
+    private void performFileValidation(PsiFile file, PsiElement firstChild, AnnotationHolder holder) {
         String fileText = file.getText();
+        TextRange elementRange = firstChild.getTextRange();
 
         // Reset counters
         hasVersionAnnotation = false;
@@ -174,18 +175,21 @@ public class PineScriptAnnotator implements Annotator {
             if (version < 4) {
                 int start = versionMatcher.start();
                 int end = versionMatcher.end();
-                holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING,
-                    "Consider upgrading to PineScript v5 or v6 for latest features and better performance.")
-                    .range(new TextRange(start, end))
-                    .enforcedTextAttributes(WARNING_ATTRIBUTES)
-                    .create();
+                // Only annotate if range fits within the element
+                if (start >= elementRange.getStartOffset() && end <= elementRange.getEndOffset()) {
+                    holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING,
+                        "Consider upgrading to PineScript v5 or v6 for latest features and better performance.")
+                        .range(new TextRange(start, end))
+                        .enforcedTextAttributes(WARNING_ATTRIBUTES)
+                        .create();
+                }
             }
         } else {
-            // No version annotation found - add warning at start of file
+            // No version annotation found - add warning on the first element
             if (fileText.length() > 0) {
                 holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING,
                     "Missing version annotation. Add '//@version=6' at the top of your script.")
-                    .range(new TextRange(0, Math.min(1, fileText.length())))
+                    .range(elementRange)
                     .enforcedTextAttributes(WARNING_ATTRIBUTES)
                     .create();
             }
@@ -201,24 +205,12 @@ public class PineScriptAnnotator implements Annotator {
         }
 
         if (!hasScriptDeclaration && hasVersionAnnotation) {
-            // Find a good place to show this error (after version annotation or at start)
-            Matcher m = VERSION_PATTERN.matcher(fileText);
-            int errorStart = 0;
-            if (m.find()) {
-                errorStart = m.end();
-                // Skip to next line
-                int newlineIdx = fileText.indexOf('\n', errorStart);
-                if (newlineIdx > 0) {
-                    errorStart = newlineIdx + 1;
-                }
-            }
-            if (errorStart < fileText.length()) {
-                holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING,
-                    "Script must declare indicator(), strategy(), or library().")
-                    .range(new TextRange(errorStart, Math.min(errorStart + 1, fileText.length())))
-                    .enforcedTextAttributes(ERROR_ATTRIBUTES)
-                    .create();
-            }
+            // Annotate on the first element since the target range may be outside it
+            holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING,
+                "Script must declare indicator(), strategy(), or library().")
+                .range(elementRange)
+                .enforcedTextAttributes(ERROR_ATTRIBUTES)
+                .create();
         }
     }
 

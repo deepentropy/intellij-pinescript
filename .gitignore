@@ -22,6 +22,9 @@ nul
 # macOS
 .DS_Store
 
+# Secrets
+.env
+
 # Windows
 Thumbs.db
 .tmp/

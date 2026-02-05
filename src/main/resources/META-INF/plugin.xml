@@ -28,6 +28,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <h3>Version 1.0.6 - Annotator Fix</h3>
+      <ul>
+        <li><strong>Bug Fix:</strong> Fixed PluginException caused by annotation range exceeding element bounds during file-level validation</li>
+      </ul>
+
       <h3>Version 1.0.5 - Bug Fix &amp; Live Compilation</h3>
       <ul>
         <li><strong>Critical Bug Fix:</strong> Fixed ClassNotFoundException that caused IDE restart prompts during indexing (issue from v1.0.4)</li>
