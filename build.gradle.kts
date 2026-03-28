@@ -1,10 +1,10 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij.platform") version "2.10.4"
+    id("org.jetbrains.intellij.platform") version "2.13.1"
 }
 
 group = "io.github.houseofai"
-version = "1.0.6"
+version = "1.0.7"
 
 repositories {
     mavenCentral()
@@ -28,11 +28,10 @@ intellijPlatform {
     pluginConfiguration {
         id = "io.github.houseofai.pinescript"
         name = "PineScript v6 Language Support"
-        version = "1.0.6"
+        version = "1.0.7"
 
         ideaVersion {
             sinceBuild = "231"
-            untilBuild = "253.*"
         }
     }
 
