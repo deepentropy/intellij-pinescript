@@ -28,6 +28,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <h3>Version 1.0.8 - Comment Action Fix</h3>
+      <ul>
+        <li><strong>Bug Fix:</strong> Restored Ctrl-/ (Comment with Line Comment) action — Commenter extension was missing, so the IDE had no comment prefix to toggle</li>
+      </ul>
+
       <h3>Version 1.0.7 - JetBrains 2026.1+ Compatibility</h3>
       <ul>
         <li><strong>Compatibility:</strong> Removed upper IDE version limit to support JetBrains 2026.1 and all future releases</li>
@@ -94,6 +99,10 @@
         <!-- Completion contributor -->
         <completion.contributor language="PineScript"
                                implementationClass="io.github.houseofai.pinescript.completion.PineScriptCompletionContributor"/>
+
+        <!-- Line/block commenter (Ctrl-/, Ctrl-Shift-/) -->
+        <lang.commenter language="PineScript"
+                        implementationClass="io.github.houseofai.pinescript.PineScriptCommenter"/>
 
         <!-- Bracket matching -->
         <lang.braceMatcher language="PineScript"
